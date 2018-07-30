@@ -1,0 +1,28 @@
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="{{ path_for('home') }}">RunTogether</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li class="active"><a href="{{ path_for('home') }}">Home</a></li>
+      <li><a href="#">Calendar</a></li>
+      <li><a href="#">Map</a></li>
+      <li><a href="#">Statistics</a></li>
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+      {% if auth.check %}
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ auth.user.username }} <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="{{ path_for('auth.password.change') }}">Change Password</a></li>
+            <li><a href="{{ path_for('auth.cancel.cancellation') }}">ID Cancellation</a></li>
+            <li><a href="{{ path_for('auth.signout') }}">Sign Out</a></li>
+          </ul>
+        </li>
+      {% else %}
+        <li><a href="{{ path_for('auth.signup') }}"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+        <li><a href="{{ path_for('auth.signin') }}"><span class="glyphicon glyphicon-log-in"></span> Sign In</a></li>
+      {% endif %}
+    </ul>
+  </div>
+</nav>

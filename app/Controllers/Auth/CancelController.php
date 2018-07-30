@@ -1,0 +1,45 @@
+<?php
+
+namespace App\Controllers\Auth;
+
+use App\Models\User;
+use App\Models\TempUser;
+use App\Controllers\Controller;
+use Respect\Validation\Validator as v;
+
+class CancelController extends Controller
+{
+	public function getIdCancellation($request, $response)
+	{
+		return $this->view->render($response, 'auth/cancel/cancellation.twig');
+	}
+
+	public function postIdCancellation($request, $response)
+	{
+		$validation = $this->validator->validate($request, [
+			'password' => v::noWhitespace()->notEmpty()
+		]);
+
+		if ($validation->failed()) {
+			return $response->withRedirect($this->router->pathFor('auth.cancel.cancellation'));
+		}
+
+		else if ($this->auth->cancelCheck($request->getParam('password'))) {
+			$this->flash->addMessage('error', 'Sorry, password do not match.');
+			return $response->withRedirect($this->router->pathFor('auth.cancel.cancellation'));
+		}
+
+		$this->flash->addMessage('confirm');
+		return $response->withRedirect($this->router->pathFor('auth.cancel.cancellation'));
+	}
+
+	public function getConfirmCancellation($request, $response)
+	{
+		$user = $this->auth->user()->first();
+		
+		$user->delete();
+		$this->auth->logout();
+		$this->flash->addMessage('success', 'ID cancellation is successfully done.');
+		return $response->withRedirect($this->router->pathFor('home'));
+	}
+}
