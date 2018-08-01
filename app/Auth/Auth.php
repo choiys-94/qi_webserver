@@ -21,7 +21,7 @@ class Auth
 		$user = User::where('email', $email)->first();
 
 		if (!$user) {
-			return false;
+			return 'ID does not exist.';
 		}
 
 		if (password_verify($password, $user->password)) {
@@ -29,7 +29,7 @@ class Auth
 			return true;
 		}
 
-		return false;
+		return 'Password does not matched.';
 	}
 
 	public function cancelCheck($password)
@@ -54,8 +54,35 @@ class Auth
 	    return $randomString;
 	}
 
+	public function createTemporaryPassword($length = 8) {
+	    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+	    $charactersLength = strlen($characters);
+	    $randomString = '';
+	    for ($i = 0; $i < $length; $i++) {
+	        $randomString .= $characters[rand(0, $charactersLength - 1)];
+	    }
+	    
+	    return $randomString;
+	}
+
+	public function createToken($length = 32) {
+	    $characters = '0123456789abcdef';
+	    $charactersLength = strlen($characters);
+	    $randomString = '';
+	    for ($i = 0; $i < $length; $i++) {
+	        $randomString .= $characters[rand(0, $charactersLength - 1)];
+	    }
+	    
+	    return $randomString;
+	}
+
 	public function logout()
 	{
 		unset($_SESSION['username']);
+	}
+
+	public function apiLogout()
+	{
+		unset($_SESSION['token']);
 	}
 }

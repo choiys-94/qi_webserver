@@ -20,6 +20,7 @@
           </ul>
         </li>
       {% else %}
+        <li><a href="{{ path_for('auth.password.forgotten') }}"><span class="glyphicon glyphicon-repeat"></span> Forgotten Password</a></li>
         <li><a href="{{ path_for('auth.signup') }}"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
         <li><a href="{{ path_for('auth.signin') }}"><span class="glyphicon glyphicon-log-in"></span> Sign In</a></li>
       {% endif %}

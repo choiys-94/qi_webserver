@@ -85,15 +85,20 @@ $container['CancelController'] = function($container) {
 	return new \App\Controllers\Auth\CancelController($container);
 };
 
+$container['ForgottenController'] = function($container) {
+	return new \App\Controllers\Auth\ForgottenController($container);
+};
+
 $container['csrf'] = function ($container) {
 	return new \Slim\Csrf\Guard;
 };
 
 $app->add(new \App\Middleware\ValidationErrorsMiddleware($container));
 $app->add(new \App\Middleware\OldInputMiddleware($container));
+$app->add(new \App\Middleware\VerifyMiddleware($container));
 $app->add(new \App\Middleware\CsrfViewMiddleware($container));
 
-$app->add($container->csrf);
+//$app->add($container->csrf);
 
 v::with('App\\Validation\\Rules\\');
 

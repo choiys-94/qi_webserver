@@ -25,7 +25,7 @@ class CancelController extends Controller
 		}
 
 		else if ($this->auth->cancelCheck($request->getParam('password'))) {
-			$this->flash->addMessage('error', 'Sorry, password do not match.');
+			$this->flash->addMessage('error', 'Sorry, password does not matched.');
 			return $response->withRedirect($this->router->pathFor('auth.cancel.cancellation'));
 		}
 

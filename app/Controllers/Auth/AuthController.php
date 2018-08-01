@@ -28,8 +28,9 @@ class AuthController extends Controller
 			$request->getParam('password')
 		);
 
-		if (!$auth) {
-			$this->flash->addMessage('error', 'Could not sign you in with those details.');
+		if ($auth !== true) {
+			$this->flash->addMessage('error', $auth);
+
 			return $response->withRedirect($this->router->pathFor('auth.signin'));
 		}
 
@@ -44,12 +45,12 @@ class AuthController extends Controller
 	public function postSignUp($request, $response)
 	{
 		$validation = $this->validator->validate($request, [
-			'email' => v::noWhitespace()->notEmpty()->email()->emailAvailable(),
-			'username' => v::noWhitespace()->notEmpty()->alnum(),
-			'password' => v::noWhitespace()->notEmpty(),
-			'password_confirm' => v::noWhitespace()->notEmpty(),
+			'email' => v::noWhitespace()->notEmpty()->email()->emailAvailable()->length(null, 50),
+			'username' => v::noWhitespace()->notEmpty()->alnum()->length(2, 12),
+			'password' => v::noWhitespace()->notEmpty()->length(8, 50),
+			'password_confirm' => v::noWhitespace()->notEmpty()->length(8, 50),
 			'age' => v::noWhitespace()->notEmpty()->numeric()->between(1,100),
-			'gender' => v::numeric()->between(0, 1),
+			'gender' => v::noWhitespace()->notEmpty(),
 		]);
 
 		if ($validation->failed()) {
@@ -58,6 +59,12 @@ class AuthController extends Controller
 
 		else if ($request->getParam('password') !== $request->getParam('password_confirm')) {
 			$this->flash->addMessage('error', 'Passwords are unmatched!');
+
+			return $response->withRedirect($this->router->pathFor('auth.signup'));
+		}
+
+		else if (!preg_match('/(?=.*[a-z])(?=.*[0-9])[a-z0-9]/',$request->getParam('password'))){
+			$this->flash->addMessage('error', 'Passwords must have alphabet and numeric.');
 
 			return $response->withRedirect($this->router->pathFor('auth.signup'));
 		}
@@ -84,7 +91,7 @@ class AuthController extends Controller
 		$mail->Username = "mailbot.team.c@gmail.com";
 		$mail->Password = "qwer1234!@";
 		$mail->SetFrom("teamc-iot@calit2.net");
-		$mail->Subject = "TeamC-iot Test Mail";
+		$mail->Subject = "TeamC-iot Sign Up Verification";
 		$mail->Body = $content;
 		$mail->AddAddress($request->getParam('email'));
 
@@ -94,53 +101,114 @@ class AuthController extends Controller
 			echo "Message has been sent";
 		}
 
+		unset($_SESSION['verify']);
+
 		$this->flash->addMessage('success', 'You have to confirm your email.');
 		return $response->withRedirect($this->router->pathFor('home'));
 	}
 
 	public function getCompleteSignUp($request, $response)
 	{
-		$tempuser = TempUser::where('email', $request->getParam('email'))->first();
-		if ($tempuser->authcode == $request->getParam('authcode')) {
-			$user = User::create([
-				'email' => $tempuser->email,
-				'username' => $tempuser->username,
-				'password' => $tempuser->password,
-				'age' => $tempuser->age,
-				'gender' => $tempuser->gender,
+		try{
+			$tempuser = TempUser::where('email', $request->getParam('email'))->first();
+			if ($tempuser->authcode == $request->getParam('authcode')) {
+				User::create([
+					'email' => $tempuser->email,
+					'username' => $tempuser->username,
+					'password' => $tempuser->password,
+					'age' => $tempuser->age,
+					'gender' => $tempuser->gender,
+					'token' => $this->auth->createToken(),
+				]);
+
+				$tempuser->delete();
+
+				$this->flash->addMessage('info', 'You have been signed up!');
+			}
+			else {
+				$this->flash->addMessage('error', 'Invalid access!');		
+			}
+
+			return $response->withRedirect($this->router->pathFor('home'));
+		} catch (Exception $e) {
+			$this->flash->addMessage('error', 'Error!'. $e);
+			return $response->withRedirect($this->router->pathFor('home'));
+		}
+
+	}
+
+	public function postApiSignUp($request, $response)
+	{
+		$json = json_decode($request->getParam('json'));
+
+		try {
+			$authcode = $this->auth->createAuthCode();
+			$user = TempUser::create([
+				'email' => $json->userEmail,
+				'username' => $json->userNickname,
+				'password' => password_hash($json->userPassword, PASSWORD_DEFAULT),
+				'age' => (int)$json->userAge,
+				'gender' => $json->userGender,
+				'authcode' => $authcode,
 			]);
 
-			$tempuser->delete();
+			$content = '<a href="http://teamc-iot.calit2.net/auth/complete?email='. $json->userEmail .'&authcode='. $authcode .'">verify email</a>';
+			$mail = new PHPMailer(); // create a new object
+			$mail->IsSMTP(); // enable SMTP
+			$mail->SMTPDebug = 1; // debugging: 1 = errors and messages, 2 = messages only
+			$mail->SMTPAuth = true; // authentication enabled
+			$mail->SMTPSecure = 'ssl'; // secure transfer enabled REQUIRED for Gmail
+			$mail->Host = "smtp.gmail.com";
+			$mail->Port = 465; // or 587
+			$mail->IsHTML(true);
+			$mail->Username = "mailbot.team.c@gmail.com";
+			$mail->Password = "qwer1234!@";
+			$mail->SetFrom("teamc-iot@calit2.net");
+			$mail->Subject = "TeamC-iot Sign Up Verification";
+			$mail->Body = $content;
+			$mail->AddAddress($json->userEmail);
 
-			$this->flash->addMessage('info', 'You have been signed up!');
+			if (!$mail->Send()) {
+				echo "Mailer Error: " . $mail->ErrorInfo;
+			} else {
+				echo "Message has been sent";
+			}			
 
-//			$this->auth->attempt($user->email, $request->getParam('password')); 
-
-			return $response->withRedirect($this->router->pathFor('home'));	
+			return $response->withJson(array('message' => 'ok'));
+		} catch (Exception $e) {
+			return $response->withJson(array('message' => $e));
 		}
 	}
 
-	public function getIdCancellation($request, $response)
+	public function postApiSignIn($request, $response)
 	{
-		return $this->view->render($response, 'auth/cancel/cancellation.twig');
+		$json = json_decode($request->getParam('json'));
+
+		if (!($json->userEmail) || !($json->userPassword)) {
+			return $response->withJson(array('message' => 'Please input email and password.'));
+		}
+		try {
+			$auth = $this->auth->attempt($json->userEmail, $json->userPassword);
+			if ($auth) {
+				$token = User::where('email', $json->userEmail)->first()->token;
+				return $response->withJson(array('message' => 'ok', 'token' => $token));
+			}
+			else {
+				return $response->withJson(array('message' => $auth));
+			}			
+		} catch (Exception $e) {
+			return $response->withJson(array('message' => $e));
+		}
+
 	}
 
-	public function postIdCancellation($request, $response)
+	public function getApiSignOut($request, $response)
 	{
-		$validation = $this->validator->validate($request, [
-			'password' => v::noWhitespace()->notEmpty()
-		]);
-
-		if ($validation->failed()) {
-			return $response->withRedirect($this->router->pathFor('auth.cancel.cancellation'));
+		try {
+			$this->auth->apiLogout();	
+			return $response->withJson(array('message', 'ok'));
+		} catch (Exception $e) {
+			return $response->withJson(array('message', $e));
 		}
-
-		else if ($this->auth->cancelCheck($request->getParam('password'))) {
-			$this->flash->addMessage('error', 'Sorry, password do not match.');
-			return $response->withRedirect($this->router->pathFor('auth.cancel.cancellation'));
-		}
-
-		$this->flash->addMessage('confirm');
-		return $response->withRedirect($this->router->pathFor('auth.cancel.cancellation'));
 	}
 }
