@@ -109,13 +109,15 @@ class ForgottenController extends Controller
 		$json = json_decode($request->getParam('json'));
 
 		try {
-			$userinfo = User::where('token', $json->token)->first();
-			
-			if ($userinfo->token !== $json->token) {
-				return $response->withJson(array('message' => 'Invalid token! Please login.'));
-			}
-			else if ($userinfo->email !== $json->userEmail) {
+			$userinfo = User::where('email', $json->userEmail)->first();
+
+			if ($userinfo->email !== $json->userEmail) {
 				return $response->withJson(array('message' => 'Email does not exist.'));
+			}
+
+			$tempuserinfo = TempUser::where('email', $json->userEmail)->first();
+			if ($tempuserinfo) {
+				return $response->withJson(array('message' => 'Already proccessing. Please check your email.'));
 			}
 
 			$authcode = $this->auth->createAuthCode();

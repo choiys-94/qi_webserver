@@ -12,6 +12,8 @@ class AuthController extends Controller
 {
 	public function getSignOut($request, $response)
 	{
+		var_dump($_SESSION['username']);
+		die();
 		$this->auth->logout();
 		return $response->withRedirect($this->router->pathFor('home'));
 	}
@@ -119,6 +121,7 @@ class AuthController extends Controller
 					'age' => $tempuser->age,
 					'gender' => $tempuser->gender,
 					'token' => $this->auth->createToken(),
+					'is_login' => 0,
 				]);
 
 				$tempuser->delete();
@@ -142,6 +145,10 @@ class AuthController extends Controller
 		$json = json_decode($request->getParam('json'));
 
 		try {
+			$tempuserinfo = TempUser::where('email', $json->userEmail)->first();
+			if ($tempuserinfo) {
+				return $response->withJson(array('message' => 'Already proccessing. Please check your email.'));
+			}
 			$authcode = $this->auth->createAuthCode();
 			$user = TempUser::create([
 				'email' => $json->userEmail,
@@ -188,10 +195,12 @@ class AuthController extends Controller
 			return $response->withJson(array('message' => 'Please input email and password.'));
 		}
 		try {
-			$auth = $this->auth->attempt($json->userEmail, $json->userPassword);
-			if ($auth) {
-				$token = User::where('email', $json->userEmail)->first()->token;
-				return $response->withJson(array('message' => 'ok', 'token' => $token));
+			$auth = $this->auth->apiAttempt($json->userEmail, $json->userPassword);
+			if ($auth == false) {
+				$user = User::where('email', $json->userEmail)->first();
+				$user->is_login = 1;
+				$user->save();
+				return $response->withJson(array('message' => 'ok', 'token' => $user->token));
 			}
 			else {
 				return $response->withJson(array('message' => $auth));
@@ -199,16 +208,16 @@ class AuthController extends Controller
 		} catch (Exception $e) {
 			return $response->withJson(array('message' => $e));
 		}
-
 	}
 
 	public function getApiSignOut($request, $response)
 	{
+		$json = json_decode($request->getParam('json'));
 		try {
-			$this->auth->apiLogout();	
-			return $response->withJson(array('message', 'ok'));
+			$this->auth->apiLogout($json->token);
+			return $response->withJson(array('message' => 'ok'));
 		} catch (Exception $e) {
-			return $response->withJson(array('message', $e));
+			return $response->withJson(array('message' => $e));
 		}
 	}
 }

@@ -24,9 +24,27 @@ class Auth
 			return 'ID does not exist.';
 		}
 
-		if (password_verify($password, $user->password)) {
+		else if (password_verify($password, $user->password)) {
 			$_SESSION['username'] = $user->id;
 			return true;
+		}
+
+		return 'Password does not matched.';
+	}
+
+	public function apiAttempt($email, $password)
+	{
+		$user = User::where('email', $email)->first();
+
+		if (!$user) {
+			return 'ID does not exist.';
+		}
+
+		else if (password_verify($password, $user->password)) {
+			if ($user->is_login === 1) {
+				return 'Already logged in.';
+			}
+			return false;
 		}
 
 		return 'Password does not matched.';
@@ -81,8 +99,10 @@ class Auth
 		unset($_SESSION['username']);
 	}
 
-	public function apiLogout()
+	public function apiLogout($token)
 	{
-		unset($_SESSION['token']);
+		$user = User::where('token', $token)->first();
+		$user->is_login = 0;
+		$user->save();
 	}
 }

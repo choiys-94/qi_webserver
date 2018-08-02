@@ -45,49 +45,29 @@ class PasswordController extends Controller
 
 		$this->auth->user()->setPassword($request->getParam('password'));
 
-		// flash
 		$this->flash->addMessage('info', 'Your password was changed.');
-
-		// redirect
 		return $response->withRedirect($this->router->pathFor('home'));
-/*
-		$this->auth->user()->update([
-			'password' => ''
-		]);
-*/
 	}
 
 	public function postApiChangePassword($request, $response)
 	{
-		if ($request->getParam('password') !== $request->getParam('password_confirm')) {
-			$this->flash->addMessage('error', 'Sorry, New passwords do not match.');
+		$json = json_decode($request->getParam('json'));
+		try {
+			$userinfo = User::where('token', $json->token)->first();
 
-			return $response->withRedirect($this->router->pathFor('auth.password.change'));
+			if ($userinfo->token !== $json->token) {
+				return $response->withJson(array('message' => 'Invalid token! Please login.'));
+			}
+
+			if (!password_verify($json->userOldPassword, $userinfo->password)) {
+				return $response->withJson(array('message' => 'Old password does not matched. Please check your password.'));
+			}
+
+			$userinfo->password = password_hash($json->userNewPassword, PASSWORD_DEFAULT);
+			$userinfo->save();
+			return $response->withJson(array('message' => 'ok'));		
+		} catch (Exception $e) {
+			return $response->withJson(array('message' => $e));
 		}
-
-		else if ($request->getParam('password_old') === $request->getParam('password')) {
-			$this->flash->addMessage('error', 'Current and new password have to be different.');
-
-			return $response->withRedirect($this->router->pathFor('auth.password.change'));
-		}
-
-		else if (!preg_match('/(?=.*[a-z])(?=.*[0-9])[a-z0-9]/',$request->getParam('password'))){
-			$this->flash->addMessage('error', 'Passwords must have alphabet and numeric.');
-
-			return $response->withRedirect($this->router->pathFor('auth.signup'));
-		}
-
-		$this->auth->user()->setPassword($request->getParam('password'));
-
-		// flash
-		$this->flash->addMessage('info', 'Your password was changed.');
-
-		// redirect
-		return $response->withRedirect($this->router->pathFor('home'));
-/*
-		$this->auth->user()->update([
-			'password' => ''
-		]);
-*/
 	}
 }
