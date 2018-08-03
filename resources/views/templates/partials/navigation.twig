@@ -1,29 +1,41 @@
-<nav class="navbar navbar-inverse">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <a class="navbar-brand" href="{{ path_for('home') }}">RunTogether</a>
+    <!-- ***** Preloader Start ***** -->
+    <div id="preloader">
+        <div class="mosh-preloader"></div>
     </div>
-    <ul class="nav navbar-nav">
-      <li class="active"><a href="{{ path_for('home') }}">Home</a></li>
-      <li><a href="#">Calendar</a></li>
-      <li><a href="#">Map</a></li>
-      <li><a href="#">Statistics</a></li>
-    </ul>
-    <ul class="nav navbar-nav navbar-right">
-      {% if auth.check %}
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ auth.user.username }} <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><a href="{{ path_for('auth.password.change') }}">Change Password</a></li>
-            <li><a href="{{ path_for('auth.cancel.cancellation') }}">ID Cancellation</a></li>
-            <li><a href="{{ path_for('auth.signout') }}">Sign Out</a></li>
-          </ul>
-        </li>
-      {% else %}
-        <li><a href="{{ path_for('auth.password.forgotten') }}"><span class="glyphicon glyphicon-repeat"></span> Forgotten Password</a></li>
-        <li><a href="{{ path_for('auth.signup') }}"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-        <li><a href="{{ path_for('auth.signin') }}"><span class="glyphicon glyphicon-log-in"></span> Sign In</a></li>
-      {% endif %}
-    </ul>
-  </div>
-</nav>
+
+    <!-- ***** Header Area Start ***** -->
+    <header class="header_area clearfix">
+        <div class="container-fluid h-100">
+            <div class="row h-100">
+                <!-- Menu Area Start -->
+                <div class="col-12 h-100">
+                    <div class="menu_area h-100">
+                        <nav class="navbar h-100 navbar-expand-lg align-items-center">
+                            <!-- Logo -->
+                            <a class="navbar-brand" href="/"><img src="{{ base_url() }}/img/core-img/logo.png" alt="logo"></a>
+
+                            <!-- Menu Area -->
+                            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mosh-navbar" aria-controls="mosh-navbar" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+
+                                <ul class="navbar-nav animated" id="nav">
+                                    <li id="navHome" class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                                    
+                                    <li id="navCalendar" class="nav-item"><a class="nav-link" href="#">Calendar</a></li>
+                                    <li id="navMap" class="nav-item"><a class="nav-link" href="{{ path_for('maps.view') }}">Map</a></li>
+                                    <li id="navChart" class="nav-item"><a class="nav-link" href="{{ path_for('chart.view') }}">Statistics</a></li>
+                                                                       
+                                </ul>
+                                <ul class="collapse navbar-collapse justify-content-end navbar-nav animated" id="nav">
+                                    <!-- Login/Register btn -->
+                                
+                                    <li class="nav-item "><a class="nav-link" href="#" data-toggle="modal" data-target="#exampleModalCenter" ><i class="fas fa-sign-in-alt"></i></i> LogIn</a></li>
+                                
+
+                                </ul>
+                            </div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </header>
+    <!-- ***** Header Area End ***** -->

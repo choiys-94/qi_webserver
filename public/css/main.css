@@ -193,6 +193,16 @@ iframe {
   background-color: white;
 }
 
+.wrap-home {
+
+  height: 500px;
+  width: 200px;
+  background: #fff;
+  border-radius: 10px;
+  position: relative;
+  background-color: white;
+}
+
 .wrap-login200 {
   width: 390px;
   background: #fff;
@@ -221,6 +231,21 @@ iframe {
   width: 100%;
   display: block;
 }
+
+.login400-form-title {
+
+  font-family: Ubuntu-Regular;
+  font-size: 30px;
+  color: #403866;
+  line-height: 1.2;
+  text-transform: uppercase;
+  text-align: center;
+
+  width: 100%;
+  display: block;
+}
+
+
 
 
 

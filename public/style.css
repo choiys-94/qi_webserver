@@ -431,6 +431,10 @@ img {
     transition-duration: 500ms;
 }
 
+.navbar-right {
+    position: relative;
+    align-items: right;
+}
 
 /* Search Form CSS */
 
@@ -508,7 +512,17 @@ img {
 .hero-slide-content h4 {
     color: #fff;
     font-weight: 400;
-    margin-bottom: 0;
+}
+
+.hero-slide-content .wrap-home {
+    height: 500px;
+    width: 800px;  
+    background: #fff;
+    border-radius: 10px;
+    position: relative;
+    background-color: white;
+    margin-bottom: 300px;
+    margin-top: 80px;
 }
 
 .hero-slide-content .slide-img {

@@ -12,7 +12,7 @@ class ForgottenController extends Controller
 {
 	public function getForgotten($request, $response)
 	{
-		return $this->view->render($response, 'auth/password/forgotten.twig');
+		return $this->view->render($response, 'auth/password/resetpw.twig');
 	}
 
 	public function postForgotten($request, $response)
@@ -22,13 +22,13 @@ class ForgottenController extends Controller
 		]);
 
 		if ($validation->failed()) {
-			return $response->withRedirect($this->router->pathFor('auth.password.forgotten'));
+			return $response->withRedirect($this->router->pathFor('auth.password.resetpw'));
 		}
 
 		$userinfo = User::where('email', $request->getParam('email'))->first();
 		if (!$userinfo) {
 			$this->flash->addMessage('error', 'Email does not exist.');
-			return $response->withRedirect($this->router->pathFor('auth.password.forgotten'));
+			return $response->withRedirect($this->router->pathFor('auth.password.resetpw'));
 		}
 
 		$authcode = $this->auth->createAuthCode();

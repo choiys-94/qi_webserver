@@ -41,6 +41,10 @@ $container['auth'] = function ($container) {
 	return new \App\Auth\Auth;
 };
 
+$container['nav'] = function ($container) {
+	return new \App\Navigation\Navigation;
+};
+
 $container['flash'] = function ($container) {
 	return new \Slim\Flash\Messages;
 };
@@ -93,14 +97,22 @@ $container['ForgottenController'] = function($container) {
 	return new \App\Controllers\Auth\ForgottenController($container);
 };
 
-$container['csrf'] = function ($container) {
-	return new \Slim\Csrf\Guard;
+$container['ChartController'] = function($container) {
+	return new \App\Controllers\Chart\ChartController($container);
 };
+
+$container['MapsController'] = function($container) {
+	return new \App\Controllers\Maps\MapsController($container);
+};
+
+//$container['csrf'] = function ($container) {
+//	return new \Slim\Csrf\Guard;
+//};
 
 $app->add(new \App\Middleware\ValidationErrorsMiddleware($container));
 $app->add(new \App\Middleware\OldInputMiddleware($container));
 $app->add(new \App\Middleware\VerifyMiddleware($container));
-$app->add(new \App\Middleware\CsrfViewMiddleware($container));
+//$app->add(new \App\Middleware\CsrfViewMiddleware($container));
 
 //$app->add($container->csrf);
 

@@ -24,8 +24,8 @@ class AuthController extends Controller
 	public function postSignIn($request, $response)
 	{
 		$auth = $this->auth->attempt(
-			$request->getParam('email'),
-			$request->getParam('password')
+			$request->getParam('userEmail'),
+			$request->getParam('userPassword')
 		);
 
 		if ($auth !== true) {

@@ -11,10 +11,7 @@ class AuthMiddleware extends Middleware
 			$this->container->flash->addMessage('error', 'Please sign in before doing that.');
 			return $response->withRedirect($this->container->router->pathFor('auth.signin'));
 		}
-		// check if the user is not signed in
-		// flash
-		// redirect
-
+		
 		$response = $next($request, $response);
 		return $response;
 	}

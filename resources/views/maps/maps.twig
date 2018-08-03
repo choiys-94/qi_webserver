@@ -1,0 +1,61 @@
+{% extends 'templates/app.twig' %}
+
+{% block content %}
+    <div class="welcome_area clearfix" id="home" style="background-image: url({{ base_url() }}/img/bg-img/welcome-bg.png)">
+  
+      <div class="limiter">
+        <div class="container-login100" >
+          <div class="wrap-chart p-t-50 p-b-90" >
+            <form class="login100-form validate-form flex-sb flex-w ">
+
+              <span class="login400-form-title p-b-51">
+                <font color="#36287E">Check Your Way</font>
+              </span>
+
+              <div id="googleMap" style="width:100%;height:600px;"></div>
+
+       
+
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+<template>
+  <div>
+  <b-form-group label="Button style radios with <code>outline-primary</code> variant and size <code>lg</code>">
+      <b-form-radio-group id="btnradios2"
+                          buttons
+                          button-variant="outline-primary"
+                          size="lg"
+                          v-model="selected"
+                          :options="options"
+                          name="radioBtnOutline" />
+    </b-form-group>
+</div>
+</template>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script>
+      function initMap() {
+        var myLatLng = {lat: -25.363, lng: 131.044};
+
+        // Create a map object and specify the DOM element
+        // for display.
+        var map = new google.maps.Map(document.getElementById('googleMap'), {
+          center: myLatLng,
+          zoom: 4
+        });
+
+        // Create a marker and set its position.
+        var marker = new google.maps.Marker({
+          map: map,
+          position: myLatLng,
+          title: 'Hello World!'
+        });
+      }
+
+  </script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBo14gsMTplvZUpyON0yThesfVZd6xy2jo&callback=initMap"></script>
+{% endblock %}

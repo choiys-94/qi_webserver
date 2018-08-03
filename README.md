@@ -1,1 +1,0 @@
-PHP slim framework tutorial
