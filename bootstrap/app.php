@@ -1,9 +1,8 @@
 <?php
 
-//session_cache_limiter("private"); 
-//ini_set("session.cookie_lifetime", 0); 
-//ini_set("session.cache_expire", 360); 
-//ini_set("session.gc_maxlifetime", 10800);
+ini_set("session.cookie_lifetime", 0); 
+ini_set("session.cache_expire", 360); 
+ini_set("session.gc_maxlifetime", 600);
 
 use Respect\Validation\Validator as v;
 

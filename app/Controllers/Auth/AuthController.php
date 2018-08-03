@@ -12,8 +12,6 @@ class AuthController extends Controller
 {
 	public function getSignOut($request, $response)
 	{
-		var_dump($_SESSION['username']);
-		die();
 		$this->auth->logout();
 		return $response->withRedirect($this->router->pathFor('home'));
 	}
@@ -196,11 +194,11 @@ class AuthController extends Controller
 		}
 		try {
 			$auth = $this->auth->apiAttempt($json->userEmail, $json->userPassword);
-			if ($auth == false) {
+			if ($auth === false) {
 				$user = User::where('email', $json->userEmail)->first();
 				$user->is_login = 1;
 				$user->save();
-				return $response->withJson(array('message' => 'ok', 'token' => $user->token));
+				return $response->withJson(array('message' => 'ok', 'userNickname' => $user->username, 'token' => $user->token));
 			}
 			else {
 				return $response->withJson(array('message' => $auth));

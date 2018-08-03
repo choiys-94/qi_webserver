@@ -97,6 +97,7 @@ class Auth
 	public function logout()
 	{
 		unset($_SESSION['username']);
+		session_destroy();
 	}
 
 	public function apiLogout($token)
@@ -104,5 +105,6 @@ class Auth
 		$user = User::where('token', $token)->first();
 		$user->is_login = 0;
 		$user->save();
+		session_destroy();
 	}
 }
