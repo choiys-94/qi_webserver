@@ -115,7 +115,6 @@ iframe {
 	border: none !important;
 }
 
-
 /*//////////////////////////////////////////////////////////////////
 [ Utility ]*/
 .txt1 {
@@ -125,7 +124,10 @@ iframe {
   line-height: 1.4;
 }
 
-
+.flash-magrin {
+  position: relative;
+  margin-top: 100px;
+}
 
 /*//////////////////////////////////////////////////////////////////
 [ login ]*/

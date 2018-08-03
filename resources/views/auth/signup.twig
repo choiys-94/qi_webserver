@@ -5,16 +5,16 @@
 		<div class="limiter">
 			<div class="container-login100">
 				<div class="wrap-login100 p-t-50 p-b-90">
-					<form class="login100-form validate-form flex-sb flex-w">
+					<form id="signupForm" class="login100-form validate-form flex-sb flex-w" action="{{ path_for('auth.signup') }}" method="post">
 						<span class="login100-form-title p-b-51">
 							<font color="white">Sign up</font>
 						</span>
 						
 						<div class="wrap-input100 validate-input m-b-16" data-validate = "E-mail is required">
-							<input class="input100" type="email" name="email" placeholder="E-mail" maxlength="50">
+							<input class="input100" type="email" name="email" placeholder="E-mail" maxlength="50" value="{{ old.email }}">
 							<span class="focus-input100"></span>
 						</div>
-						
+						<button type="button" class="btn btn-outline-light btn-lg" style="margin-bottom: 18px;" onclick="verifyEmail()">verify</button>
 						
 						<div class="wrap-input100 validate-input m-b-16" data-validate = "Password is required">
 							<input class="input100" type="password" name="password" placeholder="Password" minlength="8" maxlength="50">
@@ -36,27 +36,47 @@
 							<span class="focus-input100"></span>
 						</div>
 
-					
-
 						<div align="center">
-
-						    <button type="button" name="gender" class="btn btn-outline-light btn-lg" value="female">Female</button>
-						    <button type="button" name="gender" class="btn btn-outline-light btn-lg" value="male">Male</button>
-
+						    <button type="button" class="btn btn-outline-light btn-lg" value="female" onclick="genderForm('female');">female</button>
+						    <button type="button" class="btn btn-outline-light btn-lg" value="male" onclick="genderForm('male');">male</button>
 						</div>
 						
 						<div class="flex-sb-m w-full p-t-3 p-b-24">
 						</div>
 
 						<div class="container-login100-form-btn m-t-17">
-							<button class="login100-form-btn">
+							<button type="submit" id="mySubmit" class="login100-form-btn">
 								Sign up
 							</button>
 						</div>
-
 					</form>
 				</div>
 			</div>
 		</div>
     </div>
+	<script>
+		function genderForm(data) {
+			temp = document.getElementById("signupForm").elements['gender'];
+			if (temp) {
+				temp.remove();
+			}
+			$('<input />').attr('type', 'hidden')
+	          .attr('name', "gender")
+	          .attr('id', 'gender')
+	          .attr('value', data)
+	          .appendTo('#signupForm');
+	      }
+
+	      function verifyEmail() {
+	      	var form = document.createElement("form");
+	      	var element1 = document.createElement("input");
+	      	form.method = "POST";
+	      	form.action = "{{ path_for('auth.verify.email') }}";
+	      	element1.value = document.getElementById("signupForm").elements['email'].value;
+	      	element1.name = 'email';
+	      	form.appendChild(element1);
+	      	document.body.appendChild(form);
+	      	form.submit();
+	      }
+	</script>
 {% endblock %}
