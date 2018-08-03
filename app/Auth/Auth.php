@@ -53,12 +53,11 @@ class Auth
 	public function cancelCheck($password)
 	{
 		$user = User::find($_SESSION['username'])->first();
-
 		if (password_verify($password, $user->password)) {
-			return false;
+			return true;
 		}
 
-		return true;
+		return false;
 	}
 
 	public function createAuthCode($length = 10) {

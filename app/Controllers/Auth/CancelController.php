@@ -23,24 +23,31 @@ class CancelController extends Controller
 		if ($validation->failed()) {
 			return $response->withRedirect($this->router->pathFor('auth.cancel.cancellation'));
 		}
-
-		else if ($this->auth->cancelCheck($request->getParam('password'))) {
+		else if (!$this->auth->cancelCheck($request->getParam('password'))) {
 			$this->flash->addMessage('error', 'Sorry, password does not matched.');
 			return $response->withRedirect($this->router->pathFor('auth.cancel.cancellation'));
 		}
-
-		$this->flash->addMessage('confirm');
-		return $response->withRedirect($this->router->pathFor('auth.cancel.cancellation'));
+		else {
+			$_SESSION['cancel'] = 'okddari';
+			$this->flash->addMessage('confirm');
+			return $response->withRedirect($this->router->pathFor('auth.cancel.cancellation'));			
+		}
 	}
 
 	public function getConfirmCancellation($request, $response)
 	{
-		$user = $this->auth->user()->first();
-		
-		$user->delete();
-		$this->auth->logout();
-		$this->flash->addMessage('success', 'ID cancellation is successfully done.');
-		return $response->withRedirect($this->router->pathFor('home'));
+		if (!isset($_SESSION['cancel'])) {
+			$this->flash->addMessage('error', 'Invalid access.');
+			return $response->withRedirect($this->router->pathFor('home'));
+		}
+		else {
+			$user = $this->auth->user()->first();
+			
+			$user->delete();
+			$this->auth->logout();
+			$this->flash->addMessage('success', 'ID cancellation is successfully done.');
+			return $response->withRedirect($this->router->pathFor('home'));			
+		}
 	}
 
 	public function postApiIdCancellation($request, $response)
