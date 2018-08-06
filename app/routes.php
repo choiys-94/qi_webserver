@@ -2,14 +2,14 @@
 
 use App\Middleware\AuthMiddleware;
 
-//$app->post('/api/auth/verify/email', 'VerifyController:postApiVerifyEmail');
-//$app->post('/api/auth/signin', 'AuthController:postApiSignIn');
-//$app->post('/api/auth/signup', 'AuthController:postApiSignUp');
-//$app->post('/api/auth/signout', 'AuthController:getApiSignOut');
-//$app->post('/api/auth/password/forgotten', 'ForgottenController:postApiForgotten');
-//$app->post('/api/auth/password/change', 'PasswordController:postApiChangePassword');
-//$app->post('/api/auth/cancel/cancellation', 'CancelController:postApiIdCancellation');
-//$app->post('/api/auth/cancel/complete', 'CancelController:getApiConfirmCancellation');
+$app->post('/api/auth/verify/email', 'VerifyController:postApiVerifyEmail');
+$app->post('/api/auth/signin', 'AuthController:postApiSignIn');
+$app->post('/api/auth/signup', 'AuthController:postApiSignUp');
+$app->post('/api/auth/signout', 'AuthController:getApiSignOut');
+$app->post('/api/auth/password/forgotten', 'ForgottenController:postApiForgotten');
+$app->post('/api/auth/password/change', 'PasswordController:postApiChangePassword');
+$app->post('/api/auth/cancel/cancellation', 'CancelController:postApiIdCancellation');
+$app->post('/api/auth/cancel/complete', 'CancelController:getApiConfirmCancellation');
 
 $app->get('/', 'HomeController:index')->setName('home');
 

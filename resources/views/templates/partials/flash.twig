@@ -11,7 +11,7 @@
 {% endif %}
 
 {% if flash.getMessage('success') %}
-	<div class="alert alert-success flash-margin" style="margin-top: 100px;">
+	<div class="alert alert-success flash-margin">
 		{{ flash.getMessage('success') | first }}
 	</div>
 {% endif %}
@@ -36,11 +36,16 @@
 	        </div>
 	    </div>
 	</div>
-	{{ csrf.field | raw }}
 </form>
 <script type="text/javascript">
     $(document).ready(function(){
         $("#myModal").modal('show');
     });
 </script>
+{% endif %}
+
+{% if flash.getMessage('email_verify') %}
+	<div class="alert alert-success flash-margin">
+		{{ flash.getMessage('email_verify') | first }}
+	</div>
 {% endif %}

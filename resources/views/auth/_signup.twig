@@ -14,7 +14,6 @@
 								<span class="help-block">{{ errors.email | first }}</span>
 							{% endif %}
 						</div>
-						{{ csrf.field | raw }}
 					</form>
 					<form action="{{ path_for('auth.signup') }}" method="post" autocomplete="off">
 						<input type="hidden" name="email" id="email" class="form-control" value="{{ old.email }}">
@@ -60,7 +59,6 @@
 						{% else %}
 							<script>document.getElementById("mySubmit").disabled = true;</script>
 						{% endif %}
-						{{ csrf.field | raw }}
 					</form>
 				</div>
 			</div>

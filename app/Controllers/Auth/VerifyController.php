@@ -15,8 +15,13 @@ class VerifyController extends Controller
 			'email' => v::noWhitespace()->notEmpty()->email()->emailAvailable()->length(null, 50),
 		]);
 
-		if (!$validation->failed()) {
-			$this->flash->addMessage('success', 'Email Available!');
+		if ( TempUser::where('email', $request->getParam('email'))->first() ) {
+			$this->flash->addMessage('error', 'Already proccessing. Please check your email.');
+			return $response->withRedirect($this->router->pathFor('auth.signup'));
+		}
+
+		else if (!$validation->failed()) {
+			$this->flash->addMessage('email_verify', 'Email Available!');
 		}
 
 		$_SESSION['verify']='email';

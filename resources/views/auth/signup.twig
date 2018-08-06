@@ -5,11 +5,12 @@
 		<div class="limiter">
 			<div class="container-login100">
 				<div class="wrap-login100 p-t-50 p-b-90">
+					{% include 'templates/partials/flash.twig' %}
+
 					<form id="signupForm" class="login100-form validate-form flex-sb flex-w" action="{{ path_for('auth.signup') }}" method="post">
 						<span class="login100-form-title p-b-51">
 							<font color="white">Sign up</font>
 						</span>
-						
 						<div class="wrap-input100 validate-input m-b-16" data-validate = "E-mail is required">
 							<input class="input100" type="email" name="email" placeholder="E-mail" maxlength="50" value="{{ old.email }}">
 							<span class="focus-input100"></span>
@@ -17,26 +18,27 @@
 						<button type="button" class="btn btn-outline-light btn-lg" style="margin-bottom: 18px;" onclick="verifyEmail()">verify</button>
 						
 						<div class="wrap-input100 validate-input m-b-16" data-validate = "Password is required">
-							<input class="input100" type="password" name="password" placeholder="Password" minlength="8" maxlength="50">
+							<input class="input100" type="password" name="password" placeholder="Password" maxlength="50">
 							<span class="focus-input100"></span>
 						</div>
 
 						<div class="wrap-input100 validate-input m-b-16" data-validate = "Password is required">
-							<input class="input100" type="password" name="password_confirm" placeholder="Comfirm Password" minlength="8" maxlength="50">
+							<input class="input100" type="password" name="password_confirm" placeholder="Comfirm Password" maxlength="50">
 							<span class="focus-input100"></span>
 						</div>
 
 						<div class="wrap-input100 validate-input m-b-16" data-validate = "nickname is required">
-							<input class="input100" type="text" name="username" placeholder="Nickname" maxlength="12">
+							<input class="input100" type="text" name="username" placeholder="Nickname" maxlength="12" value="{{ old.username }}">
 							<span class="focus-input100"></span>
 						</div>
 
 						<div class="wrap-input100 validate-input m-b-16" data-validate = "age is required">
-							<input class="input100" type="number" name="age" placeholder="Age" maxlength="3">
+							<input class="input100" type="text" name="age" placeholder="Age" maxlength="3" value="{{ old.age }}">
 							<span class="focus-input100"></span>
 						</div>
 
 						<div align="center">
+							<input type="hidden" name="gender" value="{{ old.gender }}" />
 						    <button type="button" class="btn btn-outline-light btn-lg" value="female" onclick="genderForm('female');">female</button>
 						    <button type="button" class="btn btn-outline-light btn-lg" value="male" onclick="genderForm('male');">male</button>
 						</div>
@@ -49,6 +51,11 @@
 								Sign up
 							</button>
 						</div>
+						{% if verify %}
+							<script>document.getElementById("mySubmit").disabled = false;</script>
+						{% else %}
+							<script>document.getElementById("mySubmit").disabled = true;</script>
+						{% endif %}
 					</form>
 				</div>
 			</div>

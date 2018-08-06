@@ -16,24 +16,20 @@ class AuthController extends Controller
 		return $response->withRedirect($this->router->pathFor('home'));
 	}
 
-	public function getSignIn($request, $response)
-	{
-		return $this->view->render($response, 'auth/signin.twig');
-	}
-
 	public function postSignIn($request, $response)
 	{
 		$auth = $this->auth->attempt(
-			$request->getParam('userEmail'),
-			$request->getParam('userPassword')
+			$request->getParam('email'),
+			$request->getParam('password')
 		);
 
 		if ($auth !== true) {
 			$this->flash->addMessage('error', $auth);
 
-			return $response->withRedirect($this->router->pathFor('auth.signin'));
+			return $response->withRedirect($this->router->pathFor('home'));
 		}
 
+		$this->flash->addMessage('success', 'Login Successful.');
 		return $response->withRedirect($this->router->pathFor('home'));
 	}
 
@@ -44,16 +40,20 @@ class AuthController extends Controller
 
 	public function postSignUp($request, $response)
 	{
-		$validation = $this->validator->validate($request, [
-			'email' => v::noWhitespace()->notEmpty()->email()->emailAvailable()->length(null, 50),
-			'username' => v::noWhitespace()->notEmpty()->alnum()->length(2, 12),
-			'password' => v::noWhitespace()->notEmpty()->length(8, 50),
-			'password_confirm' => v::noWhitespace()->notEmpty()->length(8, 50),
-			'age' => v::noWhitespace()->notEmpty()->numeric()->between(1,100),
-			'gender' => v::noWhitespace()->notEmpty(),
-		]);
+		if ( !($request->getParam('email') && $request->getParam('password') && $request->getParam('password_confirm') && $request->getParam('username') && $request->getParam('age') && $request->getParam('gender')) ) {
+			$this->flash->addMessage('error', 'Please input all of elements.');
 
-		if ($validation->failed()) {
+			return $response->withRedirect($this->router->pathFor('auth.signup'));
+		}
+
+		else if ( TempUser::where('email', $request->getParam('email'))->first() ) {
+			$this->flash->addMessage('error', 'Already proccessing. Please check your email.');
+			return $response->withRedirect($this->router->pathFor('auth.signup'));
+		}
+
+		else if (!preg_match('/(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9]{8,50}/',$request->getParam('password'))) {
+			$this->flash->addMessage('error', 'Passwords must have alphabet & numeric. 8~50 length needed.');
+
 			return $response->withRedirect($this->router->pathFor('auth.signup'));
 		}
 
@@ -63,8 +63,14 @@ class AuthController extends Controller
 			return $response->withRedirect($this->router->pathFor('auth.signup'));
 		}
 
-		else if (!preg_match('/(?=.*[a-z])(?=.*[0-9])[a-z0-9]/',$request->getParam('password'))){
-			$this->flash->addMessage('error', 'Passwords must have alphabet and numeric.');
+		else if (!preg_match('/(?=.*[a-zA-Z0-9])[a-zA-Z0-9]{1,12}/',$request->getParam('username'))) {
+			$this->flash->addMessage('error', 'Nickname must have 1~12 length needed.');
+
+			return $response->withRedirect($this->router->pathFor('auth.signup'));
+		}
+
+		else if (!preg_match('/[0-9]{1,3}/',$request->getParam('age'))) {
+			$this->flash->addMessage('error', 'Age must have 1~3 length needed.');
 
 			return $response->withRedirect($this->router->pathFor('auth.signup'));
 		}

@@ -13,29 +13,21 @@
                         <nav class="navbar h-100 navbar-expand-lg align-items-center">
                             <!-- Logo -->
                             <a class="navbar-brand" href="/"><img src="{{ base_url() }}/img/core-img/logo.png" alt="logo"></a>
-
                             <!-- Menu Area -->
                             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mosh-navbar" aria-controls="mosh-navbar" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-
-                                <ul class="navbar-nav animated" id="nav">
-                                    <li id="navHome" class="nav-item"><a class="nav-link" href="/">Home</a></li>
-                                    
-                                    <li id="navCalendar" class="nav-item"><a class="nav-link" href="#">Calendar</a></li>
-                                    <li id="navMap" class="nav-item"><a class="nav-link" href="{{ path_for('maps.view') }}">Map</a></li>
-                                    <li id="navChart" class="nav-item"><a class="nav-link" href="{{ path_for('chart.view') }}">Statistics</a></li>
-                                                                       
-                                </ul>
-                                <ul class="collapse navbar-collapse justify-content-end navbar-nav animated" id="nav">
-                                    <!-- Login/Register btn -->
-                                
-                                    <li class="nav-item "><a class="nav-link" href="#" data-toggle="modal" data-target="#exampleModalCenter" ><i class="fas fa-sign-in-alt"></i></i> LogIn</a></li>
-                                
-
-                                </ul>
-                            </div>
+                            <ul class="navbar-nav animated" id="nav">
+                                <li id="navHome" class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                                <li id="navCalendar" class="nav-item"><a class="nav-link" href="#">Calendar</a></li>
+                                <li id="navMap" class="nav-item"><a class="nav-link" href="{{ path_for('maps.view') }}">Map</a></li>
+                                <li id="navChart" class="nav-item"><a class="nav-link" href="{{ path_for('chart.view') }}">Statistics</a></li>                            
+                            </ul>
+                            <ul class="collapse navbar-collapse justify-content-end navbar-nav animated" id="nav">
+                                <li class="nav-item "><a class="nav-link" href="#" data-toggle="modal" data-target="#exampleModalCenter" ><i class="fas fa-sign-in-alt"></i></i> LogIn</a></li>
+                            </ul>
                         </nav>
                     </div>
                 </div>
             </div>
-        </header>
+        </div>
+    </header>
     <!-- ***** Header Area End ***** -->
