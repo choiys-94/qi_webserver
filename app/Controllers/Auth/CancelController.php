@@ -16,22 +16,17 @@ class CancelController extends Controller
 
 	public function postIdCancellation($request, $response)
 	{
-		$validation = $this->validator->validate($request, [
-			'password' => v::noWhitespace()->notEmpty()
-		]);
-
-		if ($validation->failed()) {
-			return $response->withRedirect($this->router->pathFor('auth.cancel.cancellation'));
+		if (($request->getParam('password')) !== ($request->getParam('password_confirm'))) {
+			$this->flash->addMessage('error', 'Please check password and confirm.');
 		}
 		else if (!$this->auth->cancelCheck($request->getParam('password'))) {
 			$this->flash->addMessage('error', 'Sorry, password does not matched.');
-			return $response->withRedirect($this->router->pathFor('auth.cancel.cancellation'));
 		}
 		else {
 			$_SESSION['cancel'] = 'okddari';
 			$this->flash->addMessage('confirm');
-			return $response->withRedirect($this->router->pathFor('auth.cancel.cancellation'));			
 		}
+		return $response->withRedirect($this->router->pathFor('auth.cancel.cancellation'));
 	}
 
 	public function getConfirmCancellation($request, $response)

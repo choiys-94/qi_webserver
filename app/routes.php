@@ -41,6 +41,6 @@ $app->group('', function () {
 
 	$this->get('/auth/cancel/complete', 'CancelController:getConfirmCancellation')->setName('auth.cancel.confirm');
 
-	$this->get('/auth/password/pwch', 'PasswordController:getChangePassword')->setName('auth.password.pwch');
-	$this->post('/auth/password/pwch', 'PasswordController:postChangePassword');
+	$this->get('/auth/password/chpw', 'PasswordController:getChangePassword')->setName('auth.password.chpw');
+	$this->post('/auth/password/chpw', 'PasswordController:postChangePassword');
 })->add(new AuthMiddleware($container));

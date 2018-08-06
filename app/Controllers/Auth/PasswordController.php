@@ -10,37 +10,27 @@ class PasswordController extends Controller
 {
 	public function getChangePassword($request, $response)
 	{
-		return $this->view->render($response, 'auth/password/change.twig');
+		return $this->view->render($response, 'auth/password/chpw.twig');
 	}
 
 	public function postChangePassword($request, $response)
 	{
-		$validation = $this->validator->validate($request, [
-			'password_old' => v::noWhitespace()->notEmpty()->matchesPassword($this->auth->user()->password),
-			'password' => v::noWhitespace()->notEmpty()->length(8, 50),
-			'password_confirm' => v::noWhitespace()->notEmpty()->length(8, 50),
-		]);
-
-		if ($validation->failed()) {
-			return $response->withRedirect($this->router->pathFor('auth.password.change'));
-		}
-
-		else if ($request->getParam('password') !== $request->getParam('password_confirm')) {
+		if ($request->getParam('password') !== $request->getParam('password_confirm')) {
 			$this->flash->addMessage('error', 'Sorry, New passwords do not match.');
 
-			return $response->withRedirect($this->router->pathFor('auth.password.change'));
+			return $response->withRedirect($this->router->pathFor('auth.password.chpw'));
 		}
 
 		else if ($request->getParam('password_old') === $request->getParam('password')) {
 			$this->flash->addMessage('error', 'Current and new password have to be different.');
 
-			return $response->withRedirect($this->router->pathFor('auth.password.change'));
+			return $response->withRedirect($this->router->pathFor('auth.password.chpw'));
 		}
 
-		else if (!preg_match('/(?=.*[a-z])(?=.*[0-9])[a-z0-9]/',$request->getParam('password'))){
-			$this->flash->addMessage('error', 'Passwords must have alphabet and numeric.');
+		else if (!preg_match('/(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9]{8,50}/',$request->getParam('password'))){
+			$this->flash->addMessage('error', 'Passwords must have alphabet & numeric. 8~50 length needed.');
 
-			return $response->withRedirect($this->router->pathFor('auth.signup'));
+			return $response->withRedirect($this->router->pathFor('auth.password.chpw'));
 		}
 
 		$this->auth->user()->setPassword($request->getParam('password'));

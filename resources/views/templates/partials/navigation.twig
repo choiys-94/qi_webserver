@@ -21,9 +21,17 @@
                                 <li id="navMap" class="nav-item"><a class="nav-link" href="{{ path_for('maps.view') }}">Map</a></li>
                                 <li id="navChart" class="nav-item"><a class="nav-link" href="{{ path_for('chart.view') }}">Statistics</a></li>                            
                             </ul>
+                            {% if auth.check %}
                             <ul class="collapse navbar-collapse justify-content-end navbar-nav animated" id="nav">
-                                <li class="nav-item "><a class="nav-link" href="#" data-toggle="modal" data-target="#exampleModalCenter" ><i class="fas fa-sign-in-alt"></i></i> LogIn</a></li>
+                                <li id="navCancel" class="nav-item"><a class="nav-link" href="{{ path_for('auth.cancel.cancellation') }}" style="color: #ff2222;"><i class="fas fa-ban" style="color: #ff0000;"></i>&nbsp;ID Cancellation</a></li>
+                                <li id="navReset" class="nav-item"><a class="nav-link" href="{{ path_for('auth.password.chpw') }}"><i class="fas fa-exchange-alt"></i> &nbsp;Change Password</a></li>
+                                <li id="navLogout" class="nav-item"><a class="nav-link" href="{{ path_for('auth.signout') }}"><i class="fas fa-sign-out-alt"></i> &nbsp;Logout</a></li>
+                            </ul>  
+                            {% else %}
+                            <ul class="collapse navbar-collapse justify-content-end navbar-nav animated" id="nav">
+                                <li class="nav-item "><a class="nav-link" href="#" data-toggle="modal" data-target="#signinModal"><i class="fas fa-sign-in-alt"></i> &nbsp;LogIn</a></li>
                             </ul>
+                            {% endif %}
                         </nav>
                     </div>
                 </div>
