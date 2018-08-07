@@ -15,14 +15,13 @@ class PasswordController extends Controller
 
 	public function postChangePassword($request, $response)
 	{
-		if ($request->getParam('password') !== $request->getParam('password_confirm')) {
-			$this->flash->addMessage('error', 'Sorry, New passwords do not match.');
+		if (!password_verify($request->getParam('old_password'), $this->auth->user()->password)) {
+			$this->flash->addMessage('error', 'Old password does not matched. Please check your password.');
 
-			return $response->withRedirect($this->router->pathFor('auth.password.chpw'));
+			return $response->withRedirect($this->router->pathFor('auth.password.chpw'));			
 		}
-
-		else if ($request->getParam('password_old') === $request->getParam('password')) {
-			$this->flash->addMessage('error', 'Current and new password have to be different.');
+		else if ($request->getParam('password') !== $request->getParam('password_confirm')) {
+			$this->flash->addMessage('error', 'New passwords do not matched.');
 
 			return $response->withRedirect($this->router->pathFor('auth.password.chpw'));
 		}

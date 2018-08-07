@@ -5,7 +5,6 @@ namespace App\Controllers\Auth;
 use App\Models\User;
 use App\Models\TempUser;
 use App\Controllers\Controller;
-use Respect\Validation\Validator as v;
 use PHPMailer\PHPMailer\PHPMailer;
 
 class AuthController extends Controller
@@ -49,6 +48,7 @@ class AuthController extends Controller
 
 		else if ( TempUser::where('email', $request->getParam('email'))->first() ) {
 			$this->flash->addMessage('error', 'Already proccessing. Please check your email.');
+
 			return $response->withRedirect($this->router->pathFor('auth.signup'));
 		}
 

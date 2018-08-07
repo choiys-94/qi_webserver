@@ -11,17 +11,17 @@ class VerifyController extends Controller
 {
 	public function postVerifyEmail($request, $response)
 	{
-		$validation = $this->validator->validate($request, [
-			'email' => v::noWhitespace()->notEmpty()->email()->emailAvailable()->length(null, 50),
-		]);
-
-		if ( TempUser::where('email', $request->getParam('email'))->first() ) {
+		$user=User::where('email', $request->getParam('email'))->first();
+		if (!preg_match('/[a-zA-z0-9\_\-]+\@[a-zA-z0-9\_\-]+\.[a-zA-z0-9\_\-]+/',$request->getParam('email'))) {
+			$this->flash->addMessage('error', 'Invalid email format.');
+			return $response->withRedirect($this->router->pathFor('auth.signup'));
+		}
+		else if ( TempUser::where('email', $request->getParam('email'))->first() ) {
 			$this->flash->addMessage('error', 'Already proccessing. Please check your email.');
 			return $response->withRedirect($this->router->pathFor('auth.signup'));
 		}
-
-		else if (!$validation->failed()) {
-			$this->flash->addMessage('email_verify', 'Email Available!');
+		else if (!$user) {
+			$this->flash->addMessage('success', 'Email Available!');
 		}
 
 		$_SESSION['verify']='email';
@@ -50,6 +50,5 @@ class VerifyController extends Controller
 		} catch (Exception $e) {
 			return $response->withJson(array('message' => $e));
 		}
-
 	}	
 }

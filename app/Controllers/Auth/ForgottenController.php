@@ -5,7 +5,6 @@ namespace App\Controllers\Auth;
 use App\Models\User;
 use App\Models\TempUser;
 use App\Controllers\Controller;
-use Respect\Validation\Validator as v;
 use PHPMailer\PHPMailer\PHPMailer;
 
 class ForgottenController extends Controller
@@ -17,14 +16,11 @@ class ForgottenController extends Controller
 
 	public function postForgotten($request, $response)
 	{
-		$validation = $this->validator->validate($request, [
-			'email' => v::noWhitespace()->notEmpty()->email()->length(null, 50),
-		]);
-
-		if ($validation->failed()) {
+		if (!preg_match('/[a-zA-z0-9\_\-]+\@[a-zA-z0-9\_\-]+\.[a-zA-z0-9\_\-]+/',$request->getParam('email'))) {
+			$this->flash->addMessage('error', 'Invalid email format.');
 			return $response->withRedirect($this->router->pathFor('auth.password.resetpw'));
 		}
-
+		
 		$userinfo = User::where('email', $request->getParam('email'))->first();
 		if (!$userinfo) {
 			$this->flash->addMessage('error', 'Email does not exist.');

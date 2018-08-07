@@ -9,7 +9,7 @@ class AuthMiddleware extends Middleware
 	{	
 		if (!$this->container->auth->check()) {
 			$this->container->flash->addMessage('error', 'Please sign in before doing that.');
-			return $response->withRedirect($this->container->router->pathFor('auth.signin'));
+			return $response->withRedirect($this->container->router->pathFor('home'));
 		}
 		
 		$response = $next($request, $response);

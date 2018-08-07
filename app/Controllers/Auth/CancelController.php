@@ -5,7 +5,6 @@ namespace App\Controllers\Auth;
 use App\Models\User;
 use App\Models\TempUser;
 use App\Controllers\Controller;
-use Respect\Validation\Validator as v;
 
 class CancelController extends Controller
 {
@@ -36,7 +35,7 @@ class CancelController extends Controller
 			return $response->withRedirect($this->router->pathFor('home'));
 		}
 		else {
-			$user = $this->auth->user()->first();
+			$user = $this->auth->user();
 			
 			$user->delete();
 			$this->auth->logout();

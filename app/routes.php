@@ -39,7 +39,7 @@ $app->group('', function () {
 	$this->get('/auth/cancel/cancellation', 'CancelController:getIdCancellation')->setName('auth.cancel.cancellation');
 	$this->post('/auth/cancel/cancellation', 'CancelController:postIdCancellation');
 
-	$this->get('/auth/cancel/complete', 'CancelController:getConfirmCancellation')->setName('auth.cancel.confirm');
+	$this->get('/auth/cancel/complete', 'CancelController:getConfirmCancellation')->setName('auth.cancel.complete');
 
 	$this->get('/auth/password/chpw', 'PasswordController:getChangePassword')->setName('auth.password.chpw');
 	$this->post('/auth/password/chpw', 'PasswordController:postChangePassword');

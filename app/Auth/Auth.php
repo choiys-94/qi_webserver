@@ -52,7 +52,7 @@ class Auth
 
 	public function cancelCheck($password)
 	{
-		$user = User::find($_SESSION['username'])->first();
+		$user = User::find($_SESSION['username']);
 		if (password_verify($password, $user->password)) {
 			return true;
 		}
