@@ -5,7 +5,6 @@ namespace App\Controllers\Auth;
 use App\Models\User;
 use App\Models\TempUser;
 use App\Controllers\Controller;
-use Respect\Validation\Validator as v;
 
 class VerifyController extends Controller
 {
@@ -20,10 +19,12 @@ class VerifyController extends Controller
 			$this->flash->addMessage('error', 'Already proccessing. Please check your email.');
 			return $response->withRedirect($this->router->pathFor('auth.signup'));
 		}
-		else if (!$user) {
-			$this->flash->addMessage('success', 'Email Available!');
+		else if ($user) {
+			$this->flash->addMessage('error', 'Email duplicated.');
+			return $response->withRedirect($this->router->pathFor('auth.signup'));
 		}
 
+		$this->flash->addMessage('success', 'Email Available!');
 		$_SESSION['verify']='email';
 		return $response->withRedirect($this->router->pathFor('auth.signup'));
 	}

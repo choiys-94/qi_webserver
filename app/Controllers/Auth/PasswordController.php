@@ -32,6 +32,12 @@ class PasswordController extends Controller
 			return $response->withRedirect($this->router->pathFor('auth.password.chpw'));
 		}
 
+		$user = $this->auth->user();
+		if ($user->is_temp === '1') {
+			$user->is_temp = 0;
+			$user->save();		
+		}
+
 		$this->auth->user()->setPassword($request->getParam('password'));
 
 		$this->flash->addMessage('info', 'Your password was changed.');

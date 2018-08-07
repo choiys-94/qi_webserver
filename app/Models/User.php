@@ -37,6 +37,7 @@ class User extends Model
 		'gender',
 		'token',
 		'is_login',
+		'is_temp',
 	];
 
 	public function setPassword($password)

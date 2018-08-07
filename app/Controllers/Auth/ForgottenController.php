@@ -66,6 +66,7 @@ class ForgottenController extends Controller
 		if ($tempuser->authcode == $request->getParam('authcode')) {
 			$user = User::where('email', $tempuser->email)->first();
 			$user->password = password_hash($temporary_password, PASSWORD_DEFAULT);
+			$user->is_temp = 1;
 			$user->save();
 			$tempuser->delete();
 

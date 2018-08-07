@@ -28,7 +28,10 @@ class AuthController extends Controller
 
 			return $response->withRedirect($this->router->pathFor('home'));
 		}
-
+		else if ($this->auth->user()->is_temp === '1') {
+			$this->flash->addMessage('success', 'Login Successful. You have to change your password.');	
+			return $response->withRedirect($this->router->pathFor('auth.password.chpw'));
+		}
 		$this->flash->addMessage('success', 'Login Successful.');
 		return $response->withRedirect($this->router->pathFor('home'));
 	}
