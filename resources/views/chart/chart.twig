@@ -14,12 +14,11 @@
               </button>
               <div class="dropdown-menu">
                 <a class="dropdown-item" href="#">CO</a>
-                <a class="dropdown-item" href="#">CO2</a>
                 <a class="dropdown-item" href="#">NO2</a>
                 <a class="dropdown-item" href="#">SO2</a>
                 <a class="dropdown-item" href="#">O3</a>
+                <a class="dropdown-item" href="#">Temperature</a>
                 <a class="dropdown-item" href="#">PM 2.5</a>
-                <a class="dropdown-item" href="#">PM 10</a> 
               <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="#">HeartRate</a>
               </div>
@@ -79,12 +78,20 @@
 
       // Optional; add a title and set the width and height of the chart
       var options = {
-              title: '',
-              curveType: 'function',
-              legend: { position: 'bottom' },
-              width: 1200,
-              height: 500,
-            };
+                title: '',
+                curveType: 'function',
+                legend: { position: 'bottom' },
+
+                 hAxis: {
+                        title: 'Date'
+                     },
+                  vAxis: {
+                        title: 'Concentrate'
+                     }, 
+
+                width: 1200,
+                height: 500,
+              };
 
       // Display the chart inside the <div> element with id="piechart"
       var chart = new google.visualization.LineChart(document.getElementById('curvchart'));

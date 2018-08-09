@@ -99,6 +99,10 @@ $container['MapsController'] = function($container) {
 	return new \App\Controllers\Maps\MapsController($container);
 };
 
+$container['SensorController'] = function($container) {
+	return new \App\Controllers\Sensor\SensorController($container);
+};
+
 //$container['csrf'] = function ($container) {
 //	return new \Slim\Csrf\Guard;
 //};

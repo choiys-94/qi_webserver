@@ -47,3 +47,14 @@ class User extends Model
 		]);
 	}
 }
+
+class SensorReg extends Model
+{
+	protected $table = 'sensor_reg';
+
+	protected $fillable = [
+		'mac',
+		'name', 
+		'reg_uid'
+	];
+}

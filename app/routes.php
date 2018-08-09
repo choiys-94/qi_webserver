@@ -2,6 +2,7 @@
 
 use App\Middleware\AuthMiddleware;
 
+// App User Management
 $app->post('/api/auth/verify/email', 'VerifyController:postApiVerifyEmail');
 $app->post('/api/auth/signin', 'AuthController:postApiSignIn');
 $app->post('/api/auth/signup', 'AuthController:postApiSignUp');
@@ -11,6 +12,13 @@ $app->post('/api/auth/password/change', 'PasswordController:postApiChangePasswor
 $app->post('/api/auth/cancel/cancellation', 'CancelController:postApiIdCancellation');
 $app->post('/api/auth/cancel/complete', 'CancelController:getApiConfirmCancellation');
 
+// App Sensor
+$app->post('/api/sensor/historical/view', 'SensorController:postApiHistoricalView');
+$app->post('/api/sensor/registration', 'SensorController:postApiRegistration');
+$app->post('/api/sensor/deregistration', 'SensorController:postApiDeregistration');
+$app->post('/api/sensor/listview', 'SensorController:postApiSensorListView');
+
+// Home
 $app->get('/', 'HomeController:index')->setName('home');
 
 $app->post('/auth/verify/email', 'VerifyController:postVerifyEmail')->setName('auth.verify.email');
@@ -32,6 +40,8 @@ $app->get('/auth/password/forcomplete', 'ForgottenController:getCompleteForgotte
 
 $app->get('/chart/view', 'ChartController:getChartView')->setName('chart.view');
 $app->get('/maps/view', 'MapsController:getMapsView')->setName('maps.view');
+
+$app->post('/sensor/test', 'SensorController:postSensorTest')->setName('sensor.test');
 
 $app->group('', function () {
 	$this->get('/auth/signout', 'AuthController:getSignOut')->setName('auth.signout');
