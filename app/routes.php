@@ -17,6 +17,7 @@ $app->post('/api/sensor/historical/view', 'SensorController:postApiHistoricalVie
 $app->post('/api/sensor/registration', 'SensorController:postApiRegistration');
 $app->post('/api/sensor/deregistration', 'SensorController:postApiDeregistration');
 $app->post('/api/sensor/listview', 'SensorController:postApiSensorListView');
+$app->post('/api/sensor/real/transfer', 'SensorController:postApiRealTransfer');
 
 // Home
 $app->get('/', 'HomeController:index')->setName('home');

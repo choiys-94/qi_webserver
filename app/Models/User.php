@@ -58,3 +58,22 @@ class SensorReg extends Model
 		'reg_uid'
 	];
 }
+
+class SensorReal extends Model
+{
+	protected $table = 'sensor_real';
+
+	protected $fillable = [
+		'so2',
+		'co',
+		'no2',
+		'o3',
+		'pm25',
+		'temp',
+		'lang',
+		'long',
+		'heart',
+		'time',
+		'real_uid'
+	];
+}
