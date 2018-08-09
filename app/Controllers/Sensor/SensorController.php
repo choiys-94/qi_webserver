@@ -250,6 +250,12 @@ class SensorController extends Controller
 		}
 	}
 
+	public function HistoricalCalc($uid)
+	{
+		var_dump($uid);
+		die();
+	}
+
 /*
 	public function postApiHistoricalView($request, $response)
 	{

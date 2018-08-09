@@ -95,15 +95,21 @@ class Auth
 
 	public function logout()
 	{
-		unset($_SESSION['username']);
+		$user = User::find($_SESSION['username']);
+		if ($user->is_login !== 0) {
+			$user->is_login = $user->is_login-1;
+			$user->save();
+		}
 		session_destroy();
 	}
 
 	public function apiLogout($token)
 	{
 		$user = User::where('token', $token)->first();
-		$user->is_login = 0;
-		$user->save();
+		if ($user->is_login !== 0) {
+			$user->is_login = $user->is_login-1;
+			$user->save();
+		}
 		session_destroy();
 	}
 }

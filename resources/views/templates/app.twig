@@ -111,7 +111,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
         <div class="limiter">
             <div class="container-login100">
                 <div class="wrap-login200 p-t-50 p-b-90">
-                    <form class="login100-form validate-form flex-sb flex-w" action="{{ path_for('auth.signin') }}" method="post">
+                    <form id="signinForm" class="login100-form validate-form flex-sb flex-w" action="{{ path_for('auth.signin') }}" method="post">
                         <span class="login100-form-title p-b-51">
                             Sign In
                         </span>
@@ -146,7 +146,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
                         </div>
 
                         <div class="container-login200-form-btn m-t-17">
-                            <button class="login200-form-btn">
+                            <button class="login200-form-btn" type="submit" onclick="document.getElementById('signinForm').submit();">
                                 Sign In
                             </button>
                         </div>

@@ -5,6 +5,7 @@ namespace App\Controllers\Auth;
 use App\Models\User;
 use App\Models\TempUser;
 use App\Controllers\Controller;
+use App\Controllers\Sensor\SensorController;
 use PHPMailer\PHPMailer\PHPMailer;
 
 class AuthController extends Controller
@@ -25,13 +26,15 @@ class AuthController extends Controller
 
 		if ($auth !== true) {
 			$this->flash->addMessage('error', $auth);
-
 			return $response->withRedirect($this->router->pathFor('home'));
 		}
 		else if ($this->auth->user()->is_temp === '1') {
 			$this->flash->addMessage('success', 'Login Successful. You have to change your password.');	
 			return $response->withRedirect($this->router->pathFor('auth.password.chpw'));
 		}
+		$user = User::find($_SESSION['username']);
+		$user->is_login = $user->is_login+1;
+		$user->save();
 		$this->flash->addMessage('success', 'Login Successful.');
 		return $response->withRedirect($this->router->pathFor('home'));
 	}
@@ -206,9 +209,9 @@ class AuthController extends Controller
 			$auth = $this->auth->apiAttempt($json->userEmail, $json->userPassword);
 			if ($auth === false) {
 				$user = User::where('email', $json->userEmail)->first();
-				$user->is_login = 1;
+				$user->is_login = $user->is_login+1;
 				$user->save();
-				return $response->withJson(array('message' => 'ok', 'userNickname' => $user->username, 'token' => $user->token));
+				return $response->withJson(array('message' => 'ok', 'userNickname' => $user->username, 'token' => $user->token, 'temp' => $this->auth->user()->is_temp));
 			}
 			else {
 				return $response->withJson(array('message' => $auth));
