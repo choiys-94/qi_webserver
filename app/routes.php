@@ -14,10 +14,12 @@ $app->post('/api/auth/cancel/complete', 'CancelController:getApiConfirmCancellat
 
 // App Sensor
 $app->post('/api/sensor/historical/view', 'SensorController:postApiHistoricalView');
+$app->post('/api/sensor/historical/insert', 'SensorController:postApiHistoricalInsert');
 $app->post('/api/sensor/registration', 'SensorController:postApiRegistration');
 $app->post('/api/sensor/deregistration', 'SensorController:postApiDeregistration');
 $app->post('/api/sensor/listview', 'SensorController:postApiSensorListView');
 $app->post('/api/sensor/real/transfer', 'SensorController:postApiRealTransfer');
+$app->post('/api/sensor/aqi/transfer', 'SensorController:postApiAqiTransfer');
 
 // Home
 $app->get('/', 'HomeController:index')->setName('home');

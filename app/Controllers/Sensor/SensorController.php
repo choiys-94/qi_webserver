@@ -5,6 +5,8 @@ namespace App\Controllers\Sensor;
 use App\Models\User;
 use App\Models\SensorReg;
 use App\Models\SensorReal;
+use App\Models\SensorAqi;
+use App\Models\SensorHist;
 use App\Controllers\Controller;
 
 class SensorController extends Controller
@@ -140,9 +142,115 @@ class SensorController extends Controller
 		} catch (Exception $e) {
 			return $response->withJson(array('message' => $e));
 		}
-
 	}
 
+	public function postApiAqiTransfer($request, $response)
+	{
+		// so2, co, no2, o3, pm25, temp, lang, long, heart, timestamp, token (5초)
+		try {
+			$json = json_decode($request->getParam('json'));
+			$so2aqi = $json->so2aqi;
+			$coaqi = $json->coaqi;
+			$no2aqi = $json->no2aqi;
+			$o3aqi = $json->o3aqi;
+			$pm25aqi = $json->pm25aqi;
+			$totalaqi = $json->totalaqi;
+			$time = $json->timestamp;
+			$token = $json->token;
+			$user = User::where('token', $token)->first();
+			if (!($so2aqi && $coaqi && $no2aqi && $o3aqi && $pm25aqi && $totalaqi && $time && $token)) {
+				return $response->withJson(array('message' => 'Please input all of elements.'));
+			}
+			else if (!$user) {
+				return $response->withJson(array('message' => 'Invalid token.'));
+			}
+			else {
+				SensorAqi::create([
+					'so2aqi' => $so2aqi,
+					'coaqi' => $coaqi,
+					'no2aqi' => $no2aqi,
+					'o3aqi' => $o3aqi,
+					'pm25aqi' => $pm25aqi,
+					'totalaqi' => $totalaqi,
+					'time' => date("Y-m-d H:i:s", $time),
+					'aqi_uid' => $user->id
+				]);
+				return $response->withJson(array('message' => 'ok'));
+			}
+		} catch (Exception $e) {
+			return $response->withJson(array('message' => $e));
+		}
+	}
+
+	public function postApiHistoricalView($request, $response)
+	{
+		// 형한테 date, period, datatype,token
+		// so2, co, no2, o3, pm25, temp, heart
+		try {
+			$json = json_decode($request->getParam('json'));
+			$allow_type = array('so2', 'co', 'no2', 'o3', 'pm25', 'temp', 'heart');
+			$allow_period = array('7', '30', '90');
+			$token = $json->token;
+			$datatype = $json->datatype;
+		    $date = $json->date;
+		    $period = $json->period;
+			$user = User::where('token', $token)->first();
+			if (!$user) {
+				return $response->withJson(array('message' => 'Invalid token.'));
+			}
+			else if (!in_array($datatype, $allow_type)) {
+				return $response->withJson(array('message' => 'Invalid datatype.'));
+			}
+			else if (!in_array($period, $allow_period)) {
+				return $response->withJson(array('message' => 'Invalid period.'));
+			}
+			else {
+			    $data = array();
+			    for ($i = 0; $i < (int)$period; $i++) {
+			    	$hist_data = SensorHist::where('hist_uid', $user->id)->where('time', 'like', $date.'%')->first();
+			    	array_push($data, array('date' => $date, $datatype => $hist_data->$datatype));
+			    	$date = date('Y-m-d', strtotime("-1 day", strtotime($date)));
+			    }
+			}
+		    
+		    return $response->withJson(array('message' => 'ok', 'data' => $data));			
+		} catch (Exception $e) {
+			return $response->withJson(array('message' => $e));
+		}
+	}
+
+	public function postApiHistoricalInsert($request, $response)
+	{
+		// 형한테 date, period, datatype,token
+		// so2, co, no2, o3, pm25, temp, heart
+		try {
+			$json = json_decode($request->getParam('json'));
+			$token = $json->token;
+		    $date = $json->date;
+			$user = User::where('token', $token)->first();
+			if (!$user) {
+				return $response->withJson(array('message' => 'Invalid token.'));
+			}
+			else {
+			    SensorHist::create([
+			    	'so2' => $json->so2,
+			    	'co' => $json->co,
+			    	'no2' => $json->no2,
+			    	'o3' => $json->o3,
+			    	'pm25' => $json->pm25,
+			    	'temp' => $json->temp,
+			    	'heart' => $json->heart,
+			    	'time' => date("Y-m-d H:i:s", $json->timestamp),
+			    	'hist_uid' => $user->id
+			    ]);
+			}
+		    return $response->withJson(array('message' => 'ok'));
+		} catch (Exception $e) {
+			return $response->withJson(array('message' => $e));
+		}
+	}
+
+/*
 	public function postApiHistoricalView($request, $response)
 	{
 		// 형한테 date, period, datatype,token
@@ -176,9 +284,8 @@ class SensorController extends Controller
 		} catch (Exception $e) {
 			return $response->withJson(array('message' => $e));
 		}
-
 	}
-
+*/
 	public function postSensorTest($request, $response)
 	{
 		// so2, co, no2, o3, pm25, temp, lang, long, heart, time, token (3초)

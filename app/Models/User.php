@@ -77,3 +77,36 @@ class SensorReal extends Model
 		'real_uid'
 	];
 }
+
+class SensorAqi extends Model
+{
+	protected $table = 'sensor_aqi';
+
+	protected $fillable = [
+		'so2aqi',
+		'coaqi',
+		'no2aqi',
+		'o3aqi',
+		'pm25aqi',
+		'totalaqi',
+		'time',
+		'aqi_uid'
+	];
+}
+
+class SensorHist extends Model
+{
+	protected $table = 'sensor_hist';
+
+	protected $fillable = [
+		'so2',
+		'co',
+		'no2',
+		'o3',
+		'pm25',
+		'temp',
+		'heart',
+		'time',
+		'hist_uid'
+	];
+}
