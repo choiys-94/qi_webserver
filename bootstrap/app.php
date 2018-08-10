@@ -103,6 +103,10 @@ $container['SensorController'] = function($container) {
 	return new \App\Controllers\Sensor\SensorController($container);
 };
 
+$container['DashboardController'] = function($container) {
+	return new \App\Controllers\Dashboard\DashboardController($container);
+};
+
 //$container['csrf'] = function ($container) {
 //	return new \Slim\Csrf\Guard;
 //};

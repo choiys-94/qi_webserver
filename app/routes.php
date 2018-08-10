@@ -21,6 +21,15 @@ $app->post('/api/sensor/listview', 'SensorController:postApiSensorListView');
 $app->post('/api/sensor/real/transfer', 'SensorController:postApiRealTransfer');
 $app->post('/api/sensor/aqi/transfer', 'SensorController:postApiAqiTransfer');
 
+// Web Sensor
+$app->get('/sensor/historical/view', 'SensorController:getHistoricalView')->setName('sensor.historical.view');
+$app->get('/sensor/real/view', 'SensorController:getRealView');
+$app->get('/sensor/aqi/view', 'SensorController:getAqiView');
+
+// Web Dashboard
+$app->get('/dashboard/raw/view', 'DashboardController:getRawView')->setName('dashboard.raw.view');
+$app->get('/dashboard/aqi/view', 'DashboardController:getAqiView')->setName('dashboard.aqi.view');
+
 // Home
 $app->get('/', 'HomeController:index')->setName('home');
 

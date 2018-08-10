@@ -18,9 +18,16 @@
                             <ul class="navbar-nav animated" id="nav">
                                 <li id="navHome" class="nav-item"><a class="nav-link" href="/">Dashboard</a></li>
                                 {% if auth.check %}
-                                <li id="navCalendar" class="nav-item"><a class="nav-link" href="#">Calendar</a></li>
                                 <li id="navMap" class="nav-item"><a class="nav-link" href="{{ path_for('maps.view') }}">Map</a></li>
-                                <li id="navChart" class="nav-item"><a class="nav-link" href="{{ path_for('chart.view') }}">Statistics</a></li>                            
+                                <li id="navChart" class="nav-item"><a class="nav-link" href="{{ path_for('chart.view') }}">Statistics</a></li>            
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="moshDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">UserListView</a>
+                                    <div class="dropdown-menu" aria-labelledby="moshDropdown">
+                                        {% for i in 0..10 %}
+                                            <a class="dropdown-item" href="index.html">{{ i }}</a>
+                                        {% endfor %}
+                                    </div>
+                                </li>                
                                 {% endif %}
                             </ul>
                             {% if auth.check %}

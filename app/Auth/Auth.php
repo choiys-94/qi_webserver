@@ -75,10 +75,10 @@ class Auth
 	    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 	    $charactersLength = strlen($characters);
 	    $randomString = '';
-	    for ($i = 0; $i < $length; $i++) {
+	    for ($i = 0; $i < $length-1; $i++) {
 	        $randomString .= $characters[rand(0, $charactersLength - 1)];
 	    }
-	    
+	    $randomString .= $characters[rand(0, 9)];
 	    return $randomString;
 	}
 

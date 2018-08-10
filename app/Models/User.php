@@ -100,10 +100,16 @@ class SensorHist extends Model
 
 	protected $fillable = [
 		'so2',
+		'so2aqi',
 		'co',
+		'coaqi',
 		'no2',
+		'no2aqi',
 		'o3',
+		'o3aqi',
 		'pm25',
+		'pm25aqi',
+		'totalaqi',
 		'temp',
 		'heart',
 		'time',

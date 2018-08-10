@@ -32,6 +32,7 @@ class AuthController extends Controller
 			$this->flash->addMessage('success', 'Login Successful. You have to change your password.');	
 			return $response->withRedirect($this->router->pathFor('auth.password.chpw'));
 		}
+		SensorController::HistoricalCalc($this->auth->user()->id);
 		$user = User::find($_SESSION['username']);
 		$user->is_login = $user->is_login+1;
 		$user->save();
@@ -211,7 +212,8 @@ class AuthController extends Controller
 				$user = User::where('email', $json->userEmail)->first();
 				$user->is_login = $user->is_login+1;
 				$user->save();
-				return $response->withJson(array('message' => 'ok', 'userNickname' => $user->username, 'token' => $user->token, 'temp' => $this->auth->user()->is_temp));
+				SensorController::HistoricalCalc($user->id);
+				return $response->withJson(array('message' => 'ok', 'userNickname' => $user->username, 'token' => $user->token, 'temp' => $user->is_temp));
 			}
 			else {
 				return $response->withJson(array('message' => $auth));

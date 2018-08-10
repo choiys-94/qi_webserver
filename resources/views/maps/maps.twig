@@ -12,7 +12,7 @@
                 <font color="#36287E">Check Your Way</font>
               </span>
 
-              <div id="googleMap" style="width:100%;height:600px;"></div>
+              <div id="map" style="width:100%;height:600px;"></div>
 
        
 
@@ -37,25 +37,53 @@
 </div>
 </template>
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-  <script>
+<script>
+var mark= (function(){
+  var json=null;
+  $.ajax({
+        'async': false,
+        'url': "{{ base_url() }}/data/maps.json",
+        'dataType': "json",
+        'success': function (data) {
+            json = data;
+          }
+    });
+    return json;
+})();
+
       function initMap() {
-        var myLatLng = {lat: -25.363, lng: 131.044};
-
-        // Create a map object and specify the DOM element
-        // for display.
-        var map = new google.maps.Map(document.getElementById('googleMap'), {
-          center: myLatLng,
-          zoom: 4
+        
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 18,
+          center: {lat: 32.887165, lng: -117.240307},
+          mapTypeId: 'terrain'
         });
 
-        // Create a marker and set its position.
-        var marker = new google.maps.Marker({
-          map: map,
-          position: myLatLng,
-          title: 'Hello World!'
+        var flightPlanCoordinates = [];
+
+        for(var one in mark) {
+            flightPlanCoordinates.push({lat:mark[one].lat,lng:mark[one].lng});
+        }
+
+        //var flightPlanCoordinates = [
+       //   {lat: 32.888695, lng: -117.238890},
+        //  {lat: 32.887776, lng: -117.238772},
+        //  {lat: 32.887308, lng: -117.238751},
+       //   {lat: 32.886812, lng: -117.238697},
+       // ];
+
+        var flightPath = new google.maps.Polyline({
+          path: flightPlanCoordinates,
+          geodesic: true,
+          strokeColor: '#FF0000',
+          strokeOpacity: 1.0,
+          strokeWeight: 2
         });
+
+        flightPath.setMap(map);
+      
       }
 
-  </script>
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBo14gsMTplvZUpyON0yThesfVZd6xy2jo&callback=initMap"></script>
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDMURsURWfQpD4syA7AY8Vdi4U_3CeBvOE&callback=initMap"></script>
 {% endblock %}

@@ -1,6 +1,8 @@
 {% extends 'templates/app.twig' %}
 
 {% block content %}
+<script src="{{ base_url() }}/js/dist.js"></script>
+<script src="{{ base_url() }}/js/utils.js"></script>
     <div class="welcome_area clearfix" id="home" style="background-image: url({{ base_url() }}/img/bg-img/welcome-bg.png)">
   
     <div class="limiter">
@@ -8,35 +10,37 @@
         <div class="wrap-chart p-t-50 p-b-90" >
           <form class="login100-form validate-form flex-sb flex-w ">
 
-            <div class="btn-group" style="margin-left: 150px;">
-              <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Type
-              </button>
-              <div class="dropdown-menu">
-                <a class="dropdown-item" href="#">CO</a>
-                <a class="dropdown-item" href="#">NO2</a>
-                <a class="dropdown-item" href="#">SO2</a>
-                <a class="dropdown-item" href="#">O3</a>
-                <a class="dropdown-item" href="#">Temperature</a>
-                <a class="dropdown-item" href="#">PM 2.5</a>
-              <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">HeartRate</a>
-              </div>
+            <span class="login400-form-title p-b-51">
+              <font color="#36287E">Historical chart</font><br><br>
+               <div class="flex-container3">
+                <span style="margin-right:20px;"><b>RAW</b></span>
+                <button><a onclick="chartview(chartview.period, 'no2')">NO2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></button>
+                <button><a onclick="chartview(chartview.period, 'so2')">SO2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></button>
+                <button><a onclick="chartview(chartview.period, 'co')">CO&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></button>
+                <button><a onclick="chartview(chartview.period, 'o3')">O3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></button>
+                <button><a onclick="chartview(chartview.period, 'pm25')">PM2.5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></button>
+                <button><a onclick="chartview(chartview.period, 'heart')">HEART&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></button>
+                <button><a onclick="chartview(chartview.period, 'temp')">TEMPERATURE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></button>
+                
+               </div>
+               <div class="flex-container3">
+                <span style="margin-right:28px;"><b>AQI</b></span>
+                <button><a onclick="chartview(chartview.period, 'no2aqi')">NO2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></button>
+                <button><a onclick="chartview(chartview.period, 'so2aqi')">SO2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></button>
+                <button><a onclick="chartview(chartview.period, 'coaqi')">CO&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></button>
+                <button><a onclick="chartview(chartview.period, 'o3aqi')">O3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></button>
+                <button><a onclick="chartview(chartview.period, 'pm25aqi')">PM2.5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></button>
+                <button><a onclick="chartview(chartview.period, 'totalaqi')">TOTAL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></button>
+               </div>
 
-             <div style="margin-left: 600px;">
-                <div>
-                  
-                  <button type="button" class="btn btn-outline-primary">A week</button>
-                  <button type="button" class="btn btn-outline-primary">A Month</button>
-                  <button type="button" class="btn btn-outline-primary">3 Months</button>
-                </div>
-              </div>
-            </div>
-            
-           <div>
-              <div id="curvchart"></div>
-            </div>
-         
+               <button><a onclick="chartview(7, chartview.viewtype)"> 1 week </a></button>
+               <button><a onclick="chartview(30, chartview.viewtype)"> 1 Month </a></button>
+               <button><a onclick="chartview(90, chartview.viewtype)"> 3 Month </a></button>
+
+               
+            </span>
+
+             <canvas id="no2canvas"></canvas>  
 
           </form>
         </div>
@@ -44,58 +48,11 @@
     </div>
     </div>
 
-
-<template>
-  <div>
-  <b-form-group label="Button style radios with <code>outline-primary</code> variant and size <code>lg</code>">
-      <b-form-radio-group id="btnradios2"
-                          buttons
-                          button-variant="outline-primary"
-                          size="lg"
-                          v-model="selected"
-                          :options="options"
-                          name="radioBtnOutline" />
-    </b-form-group>
-</div>
-</template>
-  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-  <script type="text/javascript">
-    // Load google charts
-    google.charts.load('current', {'packages':['corechart']});
-    google.charts.setOnLoadCallback(drawChart);
-
-    // Draw the chart and set the chart values
-    function drawChart() {
-      var data = google.visualization.arrayToDataTable([
-      ['Task', 'Hours per Day'],
-      ['Work', 8],
-      ['Friends', 2],
-      ['Eat', 2],
-      ['TV', 3],
-      ['Gym', 2],
-      ['Sleep', 7]
-    ]);
-
-      // Optional; add a title and set the width and height of the chart
-      var options = {
-                title: '',
-                curveType: 'function',
-                legend: { position: 'bottom' },
-
-                 hAxis: {
-                        title: 'Date'
-                     },
-                  vAxis: {
-                        title: 'Concentrate'
-                     }, 
-
-                width: 1200,
-                height: 500,
-              };
-
-      // Display the chart inside the <div> element with id="piechart"
-      var chart = new google.visualization.LineChart(document.getElementById('curvchart'));
-      chart.draw(data, options);
-    }
-  </script>
+    <script>
+      chartview.period=7;
+      chartview.viewtype='no2';
+    </script>
+    <script type="text/javascript" src="{{ base_url() }}/js/jquery-2.2.4.min.js"></script>
+    <script type="text/javascript" src="{{ base_url() }}/js/Chart.min.js"></script>
+    <script type="text/javascript" src="{{ base_url() }}/js/app.js"></script>
 {% endblock %}

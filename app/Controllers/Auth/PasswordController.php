@@ -57,9 +57,12 @@ class PasswordController extends Controller
 			if (!password_verify($json->userOldPassword, $userinfo->password)) {
 				return $response->withJson(array('message' => 'Old password does not matched. Please check your password.'));
 			}
-
 			$userinfo->password = password_hash($json->userNewPassword, PASSWORD_DEFAULT);
 			$userinfo->save();
+			if ($userinfo->is_temp === '1') {
+				$userinfo->is_temp = 0;
+				$userinfo->save();		
+			}
 			return $response->withJson(array('message' => 'ok'));		
 		} catch (Exception $e) {
 			return $response->withJson(array('message' => $e));
