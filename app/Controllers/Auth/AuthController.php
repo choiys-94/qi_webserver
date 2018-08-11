@@ -241,4 +241,22 @@ class AuthController extends Controller
 			return $response->withJson(array('message' => $e));
 		}
 	}
+
+	public function postApiUserList($request, $response)
+	{
+		$json = json_decode($request->getParam('json'));
+		try {
+			$token = $json->token;
+			$user = User::where('token', $token)->first();
+			if (!$user) {
+				return $response->withJson(array('message' => 'Invalid user.'));
+			}
+			else {
+				$userlist = $this->auth->userlist();
+				return $response->withJson(array('message' => 'ok', 'data' => $userlist));
+			}
+		} catch (Exception $e) {
+			return $response->withJson(array('message' => $e));
+		}
+	}
 }

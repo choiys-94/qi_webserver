@@ -435,6 +435,28 @@ class SensorController extends Controller
 		}
 	}
 
+	public function postAllUserView($request, $response)
+	{
+		$json = json_decode($request->getParam('json'));
+		try {
+			$token = $json->token;
+			$email = $json->email;
+			$user = User::where('token', $token)->first();
+			if (!$user) {
+				return $response->withJson(array('message' => 'Invalid user.'));
+			}
+			else {
+				$specific_id = User::where('email', $email)->first()->id;
+				$specific_Real = SensorReal::where('real_uid', $specific_id)->orderBy('time', 'desc')->first();
+				$specific_Aqi = SensorAqi::where('aqi_uid', $specific_id)->orderBy('time', 'desc')->first();
+	    		array_push($data, array('so2' => $specific_Real->so2, 'co' => $specific_Real->co, 'no2' => $specific_Real->no2, 'o3' => $specific_Real->o3, 'pm25' => $specific_Real->pm25, 'temp' => $specific_Real->temp, 'heart' => $specific_Real->heart, 'so2aqi' => $specific_Aqi->so2aqi, 'coaqi' => $specific_Aqi->coaqi, 'no2aqi' => $specific_Aqi->no2aqi, 'o3aqi' => $specific_Aqi->o3aqi, 'pm25aqi' => $specific_Aqi->pm25aqi, 'totalaqi' => $specific_Aqi->totalaqi));
+				return $response->withJson(array('message' => 'ok', 'data' => $data));
+			}
+		} catch (Exception $e) {
+			return $response->withJson(array('message' => $e));
+		}
+	}
+
 /*
 	public function postApiHistoricalView($request, $response)
 	{

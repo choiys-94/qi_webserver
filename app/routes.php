@@ -11,6 +11,35 @@ $app->post('/api/auth/password/forgotten', 'ForgottenController:postApiForgotten
 $app->post('/api/auth/password/change', 'PasswordController:postApiChangePassword');
 $app->post('/api/auth/cancel/cancellation', 'CancelController:postApiIdCancellation');
 $app->post('/api/auth/cancel/complete', 'CancelController:getApiConfirmCancellation');
+$app->post('/api/auth/user/list', 'AuthController:postApiUserList');
+
+// App Sensor
+$app->post('/api/sensor/historical/view', 'SensorController:postApiHistoricalView');
+$app->post('/api/sensor/historical/insert', 'SensorController:postApiHistoricalInsert');
+$app->post('/api/sensor/registration', 'SensorController:postApiRegistration');
+$app->post('/api/sensor/deregistration', 'SensorController:postApiDeregistration');
+$app->post('/api/sensor/listview', 'SensorController:postApiSensorListView');
+$app->post('/api/sensor/real/transfer', 'SensorController:postApiRealTransfer');
+$app->post('/api/sensor/aqi/transfer', 'SensorController:postApiAqiTransfer');
+$app->post('/api/sensor/all/view', 'SensorController:postAllUserView');
+
+// Web Chart
+$app->get('/chart/view', 'ChartController:getChartView')->setName('chart.view');
+
+// Web Maps
+$app->get('/maps/view', 'MapsController:getMapsView')->setName('maps.view');
+
+// Web Sensor
+$app->get('/sensor/historical/view', 'SensorController:getHistoricalView')->setName('sensor.historical.view');
+$app->get('/sensor/real/view', 'SensorController:getRealView');
+$app->get('/sensor/aqi/view', 'SensorController:getAqiView');
+$app->get('/sensor/list/view', 'SensorController:getSensorListView')->setName('sensor.list.view');
+$app->get('/sensor/get/list', 'SensorController:getSensorList');
+
+// Web Dashboard
+$app->get('/dashboard/raw/view', 'DashboardController:getRawView')->setName('dashboard.raw.view');
+$app->get('/dashboard/aqi/view', 'DashboardController:getAqiView')->setName('dashboard.aqi.view');
+$app->get('/dashboard/user/view', 'DashboardController:getUserListView')->setName('dashboard.user.view');
 
 // Home
 $app->get('/', 'HomeController:index')->setName('home');
@@ -44,32 +73,4 @@ $app->group('', function () {
 
 	$this->get('/auth/password/chpw', 'PasswordController:getChangePassword')->setName('auth.password.chpw');
 	$this->post('/auth/password/chpw', 'PasswordController:postChangePassword');
-
-
-	// App Sensor
-	$this->post('/api/sensor/historical/view', 'SensorController:postApiHistoricalView');
-	$this->post('/api/sensor/historical/insert', 'SensorController:postApiHistoricalInsert');
-	$this->post('/api/sensor/registration', 'SensorController:postApiRegistration');
-	$this->post('/api/sensor/deregistration', 'SensorController:postApiDeregistration');
-	$this->post('/api/sensor/listview', 'SensorController:postApiSensorListView');
-	$this->post('/api/sensor/real/transfer', 'SensorController:postApiRealTransfer');
-	$this->post('/api/sensor/aqi/transfer', 'SensorController:postApiAqiTransfer');
-
-	// Web Sensor
-	$this->get('/sensor/historical/view', 'SensorController:getHistoricalView')->setName('sensor.historical.view');
-	$this->get('/sensor/real/view', 'SensorController:getRealView');
-	$this->get('/sensor/aqi/view', 'SensorController:getAqiView');
-	$this->get('/sensor/list/view', 'SensorController:getSensorListView')->setName('sensor.list.view');
-	$this->get('/sensor/get/list', 'SensorController:getSensorList');
-
-	// Web Dashboard
-	$this->get('/dashboard/raw/view', 'DashboardController:getRawView')->setName('dashboard.raw.view');
-	$this->get('/dashboard/aqi/view', 'DashboardController:getAqiView')->setName('dashboard.aqi.view');
-	$this->get('/dashboard/user/view', 'DashboardController:getUserListView')->setName('dashboard.user.view');
-
-	// Web Chart
-	$this->get('/chart/view', 'ChartController:getChartView')->setName('chart.view');
-
-	// Web Maps
-	$this->get('/maps/view', 'MapsController:getMapsView')->setName('maps.view');
 })->add(new AuthMiddleware($container));
