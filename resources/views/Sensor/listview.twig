@@ -1,0 +1,57 @@
+{% extends 'templates/app.twig' %}
+
+{% block content %}
+
+    <!-- ***** Welcome Area Start ***** -->
+    <section class="welcome_area clearfix" id="home" style="background-image: url({{ base_url() }}/img/bg-img/welcome-bg.png)">
+            <!-- Single Hero Slides -->
+        <div class="single-hero-slide d-flex align-items-end justify-content-center">
+            <div class="hero-slide-content text-center">
+                {% include 'templates/partials/flash.twig' %}
+                <h2>Sensor List View</h2>    
+                <div class="wrap-home">
+                    <div class="flex-container2">
+                        {% for i in 1..auth.sensorcount %}
+                            <div style="font-size: 20px; text-align: left; margin-left: 290px; justify-content: center;">
+                                <br><span style="font-size: 30px;"><b>Device {{ i }}</b></span>
+                                <br><span style="margin-left: -80px; margin-right: 30px;"><i class="fas fa-tag"></i> <b>NAME</b> </span><span id="name{{ i }}"></span>
+                                <br><span style="margin-left: -80px; margin-right: 44px;"><i class="fas fa-globe-americas"></i> <b>MAC</b> </span><span id="mac{{ i }}"></span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script>
+        $(document).ready(function(){
+            updateList();
+        });
+
+        function updateList () {
+         $.ajax({
+           url : "/sensor/get/list",
+           type : "GET",
+           datatype : "application/json",
+           cache: false,
+           success : function(data){
+             console.log(data);
+        //     data = JSON.parse(data);
+
+            var NAME;
+            var MAC;
+
+             for(var i in data) {
+               NAME = data[i].devicename;
+               MAC = data[i].mac;
+               $("#name"+(parseInt(i)+1)).html(NAME);
+               $("#mac"+(parseInt(i)+1)).html(MAC);
+             }
+           },
+           error : function(data) {
+           }
+          });
+        }
+    </script>
+    <!-- ***** Welcome Area End ***** -->
+{% endblock %}

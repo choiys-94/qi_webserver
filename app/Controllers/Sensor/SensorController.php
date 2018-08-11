@@ -208,7 +208,12 @@ class SensorController extends Controller
 			    $data = array();
 			    for ($i = 0; $i < (int)$period; $i++) {
 			    	$hist_data = SensorHist::where('hist_uid', $user->id)->where('time', 'like', $date.'%')->first();
-			    	array_push($data, array('date' => $date, $datatype => $hist_data->$datatype));
+			    	if (!$hist_data) {
+			    		array_push($data, array('date' => $date, $datatype => '0'));
+			    	}
+			    	else {
+			    		array_push($data, array('date' => $date, $datatype => $hist_data->$datatype));
+			    	}
 			    	$date = date('Y-m-d', strtotime("-1 day", strtotime($date)));
 			    }
 			}
@@ -360,7 +365,12 @@ class SensorController extends Controller
 		// 형한테 date, period, datatype,token
 		// so2, co, no2, o3, pm25, temp, heart
 		try {
-			$user = User::find($_SESSION['username']);
+			if ($_SESSION['listview']) {
+				$user = User::where('email', $_SESSION['listview'])->first();
+			}
+			else {
+				$user = User::find($_SESSION['username']);
+			}
 			if (!$user) {
 				return $response->withJson(array('message' => 'Invalid user.'));
 			}
@@ -381,7 +391,12 @@ class SensorController extends Controller
 		// 형한테 date, period, datatype,token
 		// so2, co, no2, o3, pm25, temp, heart
 		try {
-			$user = User::find($_SESSION['username']);
+			if ($_SESSION['listview']) {
+				$user = User::where('email', $_SESSION['listview'])->first();
+			}
+			else {
+				$user = User::find($_SESSION['username']);
+			}
 			if (!$user) {
 				return $response->withJson(array('message' => 'Invalid user.'));
 			}
@@ -392,6 +407,29 @@ class SensorController extends Controller
 			}
 		    
 		    return $response->withJson($data);			
+		} catch (Exception $e) {
+			return $response->withJson(array('message' => $e));
+		}
+	}
+
+	public function getSensorListView($request, $response)
+	{
+		return $this->view->render($response, 'Sensor/listview.twig');
+	}
+
+	public function getSensorList($request, $response)
+	{
+		// token
+		try {
+			$user = $this->auth->user();
+			$devices = SensorReg::where('reg_uid', $user->id)->get();
+			$data = array();
+
+			foreach($devices as $device) {
+				array_push($data, array('devicename' => $device->name, 'mac' => $device->mac));
+			}
+
+		    return $response->withJson($data);
 		} catch (Exception $e) {
 			return $response->withJson(array('message' => $e));
 		}

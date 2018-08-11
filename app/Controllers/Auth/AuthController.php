@@ -34,6 +34,10 @@ class AuthController extends Controller
 		}
 		SensorController::HistoricalCalc($this->auth->user()->id);
 		$user = User::find($_SESSION['username']);
+		if ($user->is_login > 2) {
+			$user->is_login = 0;
+			$user->save();
+		}
 		$user->is_login = $user->is_login+1;
 		$user->save();
 		$this->flash->addMessage('success', 'Login Successful.');
@@ -210,6 +214,10 @@ class AuthController extends Controller
 			$auth = $this->auth->apiAttempt($json->userEmail, $json->userPassword);
 			if ($auth === false) {
 				$user = User::where('email', $json->userEmail)->first();
+				if ($user->is_login > 2) {
+					$user->is_login = 0;
+					$user->save();
+				}
 				$user->is_login = $user->is_login+1;
 				$user->save();
 				SensorController::HistoricalCalc($user->id);

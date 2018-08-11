@@ -573,6 +573,8 @@ function chartview(period=7, viewtype){
 
 
 $(document).ready(function(){
+	chartview.period=7;
+	chartview.viewtype='no2';
  $.ajax({
    url : "/sensor/historical/view",
    type : "GET",

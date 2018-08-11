@@ -635,6 +635,17 @@ div.c{
     margin-top: 40px;
 }
 
+.hero-slide-content .wrap-home-aqi {
+    height: 800px;
+    width: 800px;  
+    background: #fff;
+    border-radius: 10px;
+    position: relative;
+    background-color: white;
+    margin-bottom: 50px;
+    margin-top: 40px;
+}
+
 .hero-slide-content .slide-img {
     color: #fff;
     margin-top: 100px;

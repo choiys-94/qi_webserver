@@ -1,7 +1,50 @@
-<div><img src="{{ base_url() }}/img/cst/co.png" alt="so2" style="width:50%;" class="imgcenter"> <div id="so2aqi" class="border-top-1"></div></div>
+<div><img src="{{ base_url() }}/img/cst/so2.png" alt="so2" style="width:50%;" class="imgcenter"> <div id="so2aqi" class="border-top-1"></div></div>
 <div><img src="{{ base_url() }}/img/cst/co.png" alt="co" style="width:50%;" class="imgcenter"> <div id="coaqi" class="border-top-1"></div></div>
 <div><img src="{{ base_url() }}/img/cst/no2.png" alt="no2" style="width:50%;" class="imgcenter"> <div id="no2aqi" class="border-top-1"></div></div>
 <div><img src="{{ base_url() }}/img/cst/o3.png" alt="o3" style="width:50%;" class="imgcenter"> <div id="o3aqi" class="border-top-1"></div></div>
 <div><img src="{{ base_url() }}/img/cst/pm25.png" alt="pm25" style="width:50%;" class="imgcenter"> <div id="pm25aqi" class="border-top-1"></div></div>
 <div><img src="{{ base_url() }}/img/cst/total.png" alt="total" style="width:50%;" class="imgcenter"> <div id="totalaqi" class="border-top-1"></div></div>
-<script src="{{ base_url() }}/js/dashboard_aqi.js"></script>
+<!--<script src="{{ base_url() }}/js/dashboard_aqi.js"></script>-->
+<script>
+	$(document).ready(function(){
+		updateAqi();
+	});
+
+	function updateAqi () {
+	 $.ajax({
+	   url : "/sensor/aqi/view",
+	   type : "GET",
+	   datatype : "application/json",
+	   cache: false,
+	   success : function(data){
+	     console.log(data);
+	//     data = JSON.parse(data);
+
+	     var CO = [];
+	     var SO2 = [];
+	     var NO2 = [];
+	     var O3 = [];
+	     var PM2_5 = [];
+	     var TOTAL = [];
+
+	     for(var i in data) {
+	       CO.push(data[i].coaqi);
+	       SO2.push(data[i].so2aqi);
+	       NO2.push(data[i].no2aqi);
+	       O3.push(data[i].o3aqi);
+	       PM2_5.push(data[i].pm25aqi);
+		   TOTAL.push(data[i].totalaqi);
+	     }
+		$("#so2aqi").html(SO2);
+		$("#coaqi").html(CO);
+		$("#no2aqi").html(NO2);
+		$("#o3aqi").html(O3);
+		$("#pm25aqi").html(PM2_5);
+		$("#totalaqi").html(TOTAL);
+	   },
+	   error : function(data) {
+	   }
+	 });
+	 setTimeout("updateAqi()", 2000);
+	}
+</script>

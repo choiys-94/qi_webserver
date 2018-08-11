@@ -54,7 +54,6 @@
                             <h5>Fast links</h5>
                             <ul>
                                 <li><a href="{{ path_for('home') }}">Home</a></li>
-                                <li><a href="#">Calendar</a></li>
                                 <li><a href="{{ path_for('maps.view') }}">Map</a></li>
                                 <li><a href="{{ path_for('chart.view') }}">Statistics</a></li>
                             </ul>
@@ -163,6 +162,9 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
     function setClass(id) {
       document.getElementById(id).setAttribute("class", "nav-item active");
     }
+    function setDropClass(id) {
+      document.getElementById(id).setAttribute("class", "nav-item active dropdown");
+    }
     switch (current_path) {
       case "/":
         setClass("navHome");
@@ -178,6 +180,12 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
         break;
       case "/auth/cancel/cancellation":
         setClass("navCancel");
+        break;
+      case "/sensor/list/view":
+        setClass("navListView");
+        break;
+      case "/dashboard/user/view":
+        setDropClass("navUser");
         break;
       default:
         break;

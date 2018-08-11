@@ -40,5 +40,5 @@ function updateRaw () {
    error : function(data) {
    }
   });
-  setTimeout("updateRaw()", 2000);
+  setTimeout("updateRaw()", 1000);
 }

@@ -37,5 +37,5 @@ function updateAqi () {
    error : function(data) {
    }
  });
- setTimeout("updateAqi()", 2000);
+ setTimeout("updateAqi()", 1000);
 }

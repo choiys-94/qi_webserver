@@ -15,4 +15,10 @@ class DashboardController extends Controller
 	{
 		return $this->view->render($response, 'dashboard/aqi.twig');
 	}
+
+	public function getUserListView($request, $response)
+	{
+		$_SESSION['listview'] = $request->getParam('email');
+		return $this->view->render($response, 'dashboard/userlistview.twig', array('id' => $request->getParam('nickname')));
+	}
 }

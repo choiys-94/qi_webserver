@@ -60,6 +60,9 @@ $container['view'] = function($container) {
 	$view->getEnvironment()->addGlobal('auth', [
 		'check' => $container->auth->check(),
 		'user' => $container->auth->user(),
+		'userlist' => $container->auth->userlist(),
+		'nickname' => $container->auth->nickname(),
+		'sensorcount' => $container->auth->getSensorCount(), 
 	]);
 
 	$view->getEnvironment()->addGlobal('flash', $container->flash);

@@ -3,6 +3,7 @@
 namespace App\Auth;
 
 use App\Models\User;
+use App\Models\SensorReg;
 
 class Auth
 {
@@ -14,6 +15,26 @@ class Auth
 	public function check()
 	{
 		return isset($_SESSION['username']);
+	}
+
+	public function userlist()
+	{
+		$user = User::where('is_login', 'not like', '0')->get();
+		$userlist = array();
+		foreach ($user as $u) {
+			array_push($userlist, array('email' => $u->email, 'nickname' => $u->username));
+		}
+		return $userlist;
+	}
+
+	public function getSensorCount()
+	{
+		return SensorReg::where('reg_uid', $this->user()->id)->count();
+	}
+
+	public function nickname()
+	{
+		return $_SESSION['nickname'];
 	}
 
 	public function attempt($email, $password)
