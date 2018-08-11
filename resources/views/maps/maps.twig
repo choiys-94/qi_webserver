@@ -2,27 +2,19 @@
 
 {% block content %}
     <div class="welcome_area clearfix" id="home" style="background-image: url({{ base_url() }}/img/bg-img/welcome-bg.png)">
-  
       <div class="limiter">
         <div class="container-login100" >
           <div class="wrap-chart p-t-50 p-b-90" >
             <form class="login100-form validate-form flex-sb flex-w ">
-
               <span class="login400-form-title p-b-51">
-                <font color="#36287E">Check Your Way</font>
+                <font color="#36287E">Check Your Lastest Path</font>
               </span>
-
               <div id="map" style="width:100%;height:600px;"></div>
-
-       
-
             </form>
           </div>
         </div>
       </div>
     </div>
-
-
 <template>
   <div>
   <b-form-group label="Button style radios with <code>outline-primary</code> variant and size <code>lg</code>">
@@ -37,12 +29,12 @@
 </div>
 </template>
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-<script>
+<script type="text/javascript">
 var mark= (function(){
   var json=null;
   $.ajax({
         'async': false,
-        'url': "{{ base_url() }}/data/maps.json",
+        'url': "/maps/exercise/get",
         'dataType': "json",
         'success': function (data) {
             json = data;
@@ -63,15 +55,8 @@ var mark= (function(){
 
         for(var one in mark) {
             flightPlanCoordinates.push({lat:mark[one].lat,lng:mark[one].lng});
+           
         }
-
-        //var flightPlanCoordinates = [
-       //   {lat: 32.888695, lng: -117.238890},
-        //  {lat: 32.887776, lng: -117.238772},
-        //  {lat: 32.887308, lng: -117.238751},
-       //   {lat: 32.886812, lng: -117.238697},
-       // ];
-
         var flightPath = new google.maps.Polyline({
           path: flightPlanCoordinates,
           geodesic: true,
@@ -79,11 +64,40 @@ var mark= (function(){
           strokeOpacity: 1.0,
           strokeWeight: 2
         });
+         var marker1 = new google.maps.Marker({
+                    map: map,
+                    position: flightPlanCoordinates[0],
+                    title:'Start Point',                          
 
+                });
+          var marker2 = new google.maps.Marker({
+                    map: map,
+                    position: flightPlanCoordinates[flightPlanCoordinates.length-1],
+                    titme:'Finish Point',                          
+
+                });
+           var contentString = '<div id="content">'+
+                                'you started here! '+
+                                '</div>';
+          var contentString2 = '<div id="content">'+
+                                'you finished here! '+
+                                '</div>';
+          var infowindow = new google.maps.InfoWindow({
+            content: contentString
+          });
+          var infowindow2 = new google.maps.InfoWindow({
+            content: contentString2
+          });
+          marker1.addListener('click', function() {
+            infowindow.open(map, marker1);
+            });
+          marker2.addListener('click', function() {
+            infowindow2.open(map, marker2);
+            });
         flightPath.setMap(map);
-      
+        marker1.setMap(map);
+        marker2.setMap(map);
       }
-
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDMURsURWfQpD4syA7AY8Vdi4U_3CeBvOE&callback=initMap"></script>
 {% endblock %}

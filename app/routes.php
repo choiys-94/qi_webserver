@@ -13,6 +13,9 @@ $app->post('/api/auth/cancel/cancellation', 'CancelController:postApiIdCancellat
 $app->post('/api/auth/cancel/complete', 'CancelController:getApiConfirmCancellation');
 $app->post('/api/auth/user/list', 'AuthController:postApiUserList');
 
+// App Maps
+$app->post('/api/maps/exercise/reg', 'MapsController:postApiExercise');
+
 // App Sensor
 $app->post('/api/sensor/historical/view', 'SensorController:postApiHistoricalView');
 $app->post('/api/sensor/historical/insert', 'SensorController:postApiHistoricalInsert');
@@ -28,6 +31,7 @@ $app->get('/chart/view', 'ChartController:getChartView')->setName('chart.view');
 
 // Web Maps
 $app->get('/maps/view', 'MapsController:getMapsView')->setName('maps.view');
+$app->get('/maps/exercise/get', 'MapsController:getExerciseView');
 
 // Web Sensor
 $app->get('/sensor/historical/view', 'SensorController:getHistoricalView')->setName('sensor.historical.view');

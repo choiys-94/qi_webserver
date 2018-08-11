@@ -116,3 +116,14 @@ class SensorHist extends Model
 		'hist_uid'
 	];
 }
+
+class Exercise extends Model
+{
+	protected $table = 'exercise';
+
+	protected $fillable = [
+		'starttime',
+		'endtime',
+		'ex_uid',
+	];
+}

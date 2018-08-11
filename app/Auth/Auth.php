@@ -29,7 +29,13 @@ class Auth
 
 	public function getSensorCount()
 	{
-		return SensorReg::where('reg_uid', $this->user()->id)->count();
+		$count = SensorReg::where('reg_uid', $this->user()->id)->count();
+		if ($count == 0) {
+			return 1;
+		}
+		else {
+			return $count;
+		}
 	}
 
 	public function nickname()
