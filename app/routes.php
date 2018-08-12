@@ -12,6 +12,7 @@ $app->post('/api/auth/password/change', 'PasswordController:postApiChangePasswor
 $app->post('/api/auth/cancel/cancellation', 'CancelController:postApiIdCancellation');
 $app->post('/api/auth/cancel/complete', 'CancelController:getApiConfirmCancellation');
 $app->post('/api/auth/user/list', 'AuthController:postApiUserList');
+$app->get('/reset/db', 'AuthController:getResetLogin');
 
 // App Maps
 $app->post('/api/maps/exercise/reg', 'MapsController:postApiExercise');

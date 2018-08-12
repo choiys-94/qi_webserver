@@ -259,4 +259,14 @@ class AuthController extends Controller
 			return $response->withJson(array('message' => $e));
 		}
 	}
+
+	public function getResetLogin($request, $response)
+	{
+		$user = User::all();
+		foreach ($user as $u) {
+			$u->is_login = 0;
+			$u->save();
+		}
+		return $response->withRedirect($this->router->pathFor('home'));
+	}
 }
